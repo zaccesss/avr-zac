@@ -25,8 +25,6 @@
   <img src="https://img.shields.io/badge/PlatformIO-Embedded-FF7F00?style=for-the-badge&logo=platformio&logoColor=white" />
   <img src="https://img.shields.io/badge/AVR-ATmega644P-EE1C25?style=for-the-badge&logo=microchip&logoColor=white" />
   <img src="https://img.shields.io/badge/VS_Code-IDE-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white" />
-  <img src="https://img.shields.io/badge/Microchip_Studio-7-0071C5?style=for-the-badge&logo=microchip&logoColor=white" />
-  <img src="https://img.shields.io/badge/Aston_University-BEng_EECS_2028-6C2E7F?style=for-the-badge&logo=academia&logoColor=white" />
 </p>
 
 ---
