@@ -42,7 +42,7 @@
 
 A personal project to learn bare metal AVR C development, writing directly to hardware registers without any framework or abstraction layer. The ATmega644P runs at 20 MHz on a [custom PCB designed by Richard Reeves](hardware/pcb_notes.md) with an external crystal, LM317T voltage regulator and 10-way headers breaking out all 32 I/O pins.
 
-Projects progress from a basic LED blink through GPIO manipulation, button polling, interrupt-driven input, software PWM and ADC, building towards a full nine-mode state machine that includes a reaction game and a Tetris melody synced to LEDs. All code targets the ATmega644P and can be built with either [PlatformIO in VS Code](WORKFLOW.md) or Microchip Studio 7 — see [WORKFLOW.md](WORKFLOW.md) for the full setup and flash guide.
+Projects progress from a basic LED blink through GPIO manipulation, button polling, interrupt-driven input, software PWM and ADC, building towards a full nine-mode state machine that includes a reaction game and a Tetris melody synced to LEDs. All code targets the ATmega644P and can be built with either [PlatformIO in VS Code](WORKFLOW.md) or Microchip Studio 7. See [WORKFLOW.md](WORKFLOW.md) for the full setup and flash guide.
 
 ---
 
@@ -64,8 +64,8 @@ The breadboard components (LEDs, button, buzzer) are a **temporary configuration
 
 ## Getting Started
 
-1. Clone the repo and choose an IDE — VS Code with PlatformIO or Microchip Studio 7.
-2. Follow the full setup guide in [WORKFLOW.md](WORKFLOW.md) — covers prerequisites, environment switching, build tasks and flash commands.
+1. Clone the repo and choose an IDE: VS Code with PlatformIO or Microchip Studio 7.
+2. Follow the full setup guide in [WORKFLOW.md](WORKFLOW.md). It covers prerequisites, environment switching, build tasks and flash commands.
 3. Connect the Pololu programmer to the ISP header (J1) on the PCB and to a USB port (COM4).
 4. Select a project from the [Projects](#projects) table below and build.
 
