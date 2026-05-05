@@ -20,19 +20,13 @@
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&pause=1200&color=EE1C25&center=true&vCenter=true&width=600&height=55&lines=ATmega644P+Bare+Metal+C;State+Machines+%7C+Interrupts+%7C+PWM;ADC+%7C+Reaction+Game+%7C+Tetris+Melody;Personal+Embedded+Project+2026" />
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/C-Language-A8B9CC?style=for-the-badge&logo=c&logoColor=black" />
-  <img src="https://img.shields.io/badge/PlatformIO-Embedded-FF7F00?style=for-the-badge&logo=platformio&logoColor=white" />
-  <img src="https://img.shields.io/badge/AVR-ATmega644P-EE1C25?style=for-the-badge&logo=microchip&logoColor=white" />
-  <img src="https://img.shields.io/badge/VS_Code-IDE-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white" />
-</p>
-
 ---
 
 <p align="center">
   🔎 <b>Quick navigation:</b>
   <a href="#overview">Overview</a> •
   <a href="#hardware">Hardware</a> •
+  <a href="#getting-started">Getting Started</a> •
   <a href="#projects">Projects</a> •
   <a href="#state-machine-modes">State Machine</a> •
   <a href="#documentation-hub">Docs</a> •
@@ -46,8 +40,9 @@
 
 ## Overview
 
-A personal project to learn bare metal AVR C development from the ground up. Projects progress from a basic LED blink through GPIO manipulation, polling, interrupt-driven input, software PWM and ADC, finishing with a full nine-mode state machine that includes a reaction game and a Tetris melody. Every project targets the ATmega644P running at 20 MHz on a custom PCB designed by Richard Reeves.
+A personal project to learn bare metal AVR C development, writing directly to hardware registers without any framework or abstraction layer. The ATmega644P runs at 20 MHz on a [custom PCB designed by Richard Reeves](hardware/pcb_notes.md) with an external crystal, LM317T voltage regulator and 10-way headers breaking out all 32 I/O pins.
 
+Projects progress from a basic LED blink through GPIO manipulation, button polling, interrupt-driven input, software PWM and ADC, building towards a full nine-mode state machine that includes a reaction game and a Tetris melody synced to LEDs. All code targets the ATmega644P and can be built with either [PlatformIO in VS Code](WORKFLOW.md) or Microchip Studio 7 — see [WORKFLOW.md](WORKFLOW.md) for the full setup and flash guide.
 
 ---
 
@@ -61,7 +56,26 @@ A personal project to learn bare metal AVR C development from the ground up. Pro
 | PCB        | Richard Reeves AVR Project PCB 2018 with LM317T regulator |
 | Programmer | Pololu USB AVR Programmer v2.1 via STK500v2 on COM4       |
 
-The breadboard components (LEDs, button, buzzer) are a **temporary configuration** used for learning and change between sessions. See [docs/wiring.md](docs/wiring.md) for the current breadboard wiring.
+The breadboard components (LEDs, button, buzzer) are a **temporary configuration** used for learning and change between sessions. See [docs/wiring.md](docs/wiring.md) for the current breadboard connections and header pin assignments. Full PCB component list, connector pinout and power supply circuit are in [hardware/pcb_notes.md](hardware/pcb_notes.md).
+
+---
+
+<a id="getting-started"></a>
+
+## Getting Started
+
+1. Clone the repo and choose an IDE — VS Code with PlatformIO or Microchip Studio 7.
+2. Follow the full setup guide in [WORKFLOW.md](WORKFLOW.md) — covers prerequisites, environment switching, build tasks and flash commands.
+3. Connect the Pololu programmer to the ISP header (J1) on the PCB and to a USB port (COM4).
+4. Select a project from the [Projects](#projects) table below and build.
+
+Manual flash command if needed:
+
+```
+C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -B 10 -V -U flash:w:<project>.hex:i
+```
+
+The `-B 10` flag slows the ISP clock to ~50 kHz, which is required to avoid timeout errors with the Pololu programmer. See [WORKFLOW.md](WORKFLOW.md) for the full flag reference and troubleshooting steps.
 
 ---
 
@@ -69,17 +83,17 @@ The breadboard components (LEDs, button, buzzer) are a **temporary configuration
 
 ## Projects
 
-| # | File                         | Description                             | Key Concepts                           |
-| - | ---------------------------- | --------------------------------------- | -------------------------------------- |
-| 1 | `01_blink.c`                 | Double blink on PB0                     | `DDRB`, `PORTB`, `_delay_ms`           |
-| 2 | `02_led_cycle.c`             | Five LEDs cycling sequentially          | Multi-pin output                       |
-| 3 | `03_button_polling.c`        | Button drives buzzer via polling        | `PIND`, input reading                  |
-| 4 | `04_interrupt_buzzer.c`      | Button drives buzzer via INT0           | ISR, `EICRA`, `EIMSK`, `sei()`         |
-| 5 | `05_state_machine_basic.c`   | Four-mode state machine (initial build) | `enum`, ISR, debounce, `switch`        |
-| 6 | `06_state_machine.c`         | Nine-mode state machine (full build)    | PWM, ADC, reaction game, Tetris melody |
-| - | `00_fuse_test.c`             | Fuse configuration reference            | Fuse bits, clock configuration         |
+| # | File | Description | Key Concepts |
+| - | ---- | ----------- | ------------ |
+| 1 | [01_blink.c](projects/01_blink/01_blink.c) | Double blink on PB0 | `DDRB`, `PORTB`, `_delay_ms` |
+| 2 | [02_led_cycle.c](projects/02_led_cycle/02_led_cycle.c) | Five LEDs cycling sequentially | Multi-pin output, bit shifting |
+| 3 | [03_button_polling.c](projects/03_button_polling/03_button_polling.c) | Button drives buzzer via polling | `PIND`, input reading, active buzzer |
+| 4 | [04_interrupt_buzzer.c](projects/04_interrupt_buzzer/04_interrupt_buzzer.c) | Button drives buzzer via INT0 | ISR, `EICRA`, `EIMSK`, `sei()` |
+| 5 | [05_state_machine_basic.c](projects/05_state_machine_basic/05_state_machine_basic.c) | Four-mode state machine (initial build) | `enum`, ISR, debounce, `switch` |
+| 6 | [06_state_machine.c](projects/06_state_machine/06_state_machine.c) | Nine-mode state machine (full build) | PWM, ADC, reaction game, Tetris melody |
+| 0 | [00_fuse_test.c](projects/00_fuse_test/00_fuse_test.c) | Fuse configuration and restoration reference | Fuse bits, clock source, avrdude `-F` flag |
 
-Source files live in both `projects/` (one folder per project) and `platformio/src/` (all files, multi-environment build). See [WORKFLOW.md](WORKFLOW.md) for how to switch between projects in VS Code.
+Source files live in both [`projects/`](projects/) (one folder per project) and [`platformio/src/`](platformio/src/) (all files together for the multi-environment build). See [WORKFLOW.md](WORKFLOW.md) for how to switch between environments in VS Code.
 
 ---
 
@@ -87,7 +101,7 @@ Source files live in both `projects/` (one folder per project) and `platformio/s
 
 ## State Machine Modes
 
-`06_state_machine.c` cycles through nine modes on each button press.
+[`06_state_machine.c`](projects/06_state_machine/06_state_machine.c) cycles through nine modes on each button press. Mode state is held in a `volatile` variable updated inside an INT0 ISR with software debounce.
 
 | Mode | Name           | Description                                      |
 | ---- | -------------- | ------------------------------------------------ |
@@ -107,14 +121,14 @@ Source files live in both `projects/` (one folder per project) and `platformio/s
 
 ## Documentation Hub
 
-<p align="center">
-  <a href="WORKFLOW.md">⚙️ Build and Flash Workflow</a> &nbsp;•&nbsp;
-  <a href="notes/">📖 Session Notes</a> &nbsp;•&nbsp;
-  <a href="docs/wiring.md">🔌 Wiring Reference</a> &nbsp;•&nbsp;
-  <a href="docs/hardware_notes.md">🔧 Hardware Notes</a> &nbsp;•&nbsp;
-  <a href="docs/c_operators.md">📐 C Operators</a> &nbsp;•&nbsp;
-  <a href="hardware/pcb_notes.md">🖥️ PCB Reference</a>
-</p>
+| Document | Description |
+| -------- | ----------- |
+| [Build and Flash Workflow](WORKFLOW.md) | Full VS Code/PlatformIO and Microchip Studio setup, environment switching, build tasks and troubleshooting |
+| [Session Notes](notes/) | Reference notes covering GPIO, timers, interrupts, PWM, ADC and state machines |
+| [Wiring Reference](docs/wiring.md) | Current breadboard connections and header pin tables |
+| [Hardware Notes](docs/hardware_notes.md) | Fuse settings, ISP clock speed, register map and ADC configuration |
+| [C Operators Reference](docs/c_operators.md) | Arithmetic, bitwise, relational and assignment operator tables with AVR examples |
+| [PCB Full Reference](hardware/pcb_notes.md) | Component list, connector pinout, power supply circuit and soldering order |
 
 ---
 
@@ -125,8 +139,8 @@ Source files live in both `projects/` (one folder per project) and `platformio/s
 <div align="center">
 
 | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/embeddedc/embeddedc-original.svg" width="65" /> | <img src="https://cdn.simpleicons.org/platformio" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="65" /> | <img src="assets/microchip_studio.png" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width="65" /> | <img src="https://techstack-generator.vercel.app/github-icon.svg" width="65" /> |
-| :------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: |
-|                                            **C**                                             |                                                **Embedded C**                                                |                         **PlatformIO**                          |                                              **VS Code**                                               |                               **Microchip Studio**                               |                                             **Git**                                              |                                   **GitHub**                                    |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| **C** | **Embedded C** | **PlatformIO** | **VS Code** | **Microchip Studio** | **Git** | **GitHub** |
 
 </div>
 
@@ -142,7 +156,7 @@ Source files live in both `projects/` (one folder per project) and `platformio/s
 
 ## Contact and Support
 
-Open an issue in this repository for questions or bugs.
+Open an [issue](https://github.com/zaccessss/avr-zac/issues) in this repository for questions or bugs.
 
 You can also reach me directly at [contact@zacess.com](mailto:contact@zacess.com) or via my [website contact page](https://isaacadjei.me/contact).
 
