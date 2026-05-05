@@ -1,0 +1,27 @@
+# Microchip Studio build outputs
+Debug/
+Release/
+*.hex
+*.elf
+*.o
+*.d
+*.map
+*.lss
+*.eep
+*.srec
+*.bin
+
+# PlatformIO build outputs
+.pio/
+.pioenvs/
+
+# VS Code
+.vscode/
+
+# Windows
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
