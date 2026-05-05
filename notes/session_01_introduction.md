@@ -1,6 +1,6 @@
 # Session 1 — Introduction to Microcontrollers and AVR I/O
 
-Source: EE1EPJ Lecture 1 and Lab 1, Richard Reeves, Aston University, January 2024.
+Source: AVR lecture materials, Richard Reeves, Aston University, January 2024.
 Adapted for: ATmega644P, Pololu USB AVR Programmer v2.1, Richard Reeves AVR PCB 2018.
 
 ---

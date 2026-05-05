@@ -1,6 +1,6 @@
 # C Operators Reference
 
-Source: EE1EPJ module reference sheet, Richard Reeves, Aston University.
+Source: AVR reference sheet, Richard Reeves, Aston University.
 
 ---
 

@@ -7,8 +7,8 @@ Source documents: AVR_PCB_2019.pdf, schematic circuit notes and soldering refere
 
 ## Overview
 
-The AVR Project PCB is a general-purpose AVR development board for university lab use in
-EE1EPJ and EE2PRJ at Aston University. It supports four DIP-40 ATmega variants and breaks
+The AVR Project PCB is a general-purpose AVR development board designed for use at
+Aston University. It supports four DIP-40 ATmega variants and breaks
 all 32 I/O pins out on 10-way headers.
 
 **Compatible devices:** ATmega164P, ATmega324P, ATmega644P and ATmega1284P.
