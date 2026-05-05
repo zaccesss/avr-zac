@@ -1,4 +1,7 @@
-# AVR Zac
+<!-- Header -->
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=120&section=header&text=Bare+Metal+AVR+%E2%9A%A1&fontSize=38&fontAlignY=32&fontColor=ffffff&animation=bounce" />
+</p>
 
 <p align="center">
   <a href="https://isaacadjei.me">
@@ -14,7 +17,7 @@
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&pause=1200&color=EE1C25&center=true&vCenter=true&width=600&height=55&lines=ATmega644P+Bare+Metal+C;State+Machines+%7C+Interrupts+%7C+PWM;ADC+%7C+Reaction+Game+%7C+Tetris+Melody;Aston+University+EE1EPJ+2025" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&pause=1200&color=EE1C25&center=true&vCenter=true&width=600&height=55&lines=ATmega644P+Bare+Metal+C;State+Machines+%7C+Interrupts+%7C+PWM;ADC+%7C+Reaction+Game+%7C+Tetris+Melody;Personal+Embedded+Project+2026" />
 </p>
 
 <p align="center">
@@ -45,9 +48,9 @@
 
 ## Overview
 
-Bare metal AVR C projects developed during Year 1 of the BEng Electronic Engineering and Computer Science at Aston University (EE1EPJ). The work spans nine lab sessions and progresses from a basic LED blink through GPIO manipulation, polling, interrupt-driven input, software PWM and ADC, finishing with a full nine-mode state machine that includes a reaction game and a Tetris melody. Every project targets the ATmega644P running at 20 MHz on a custom PCB designed by Richard Reeves.
+A personal project to learn bare metal AVR C development from the ground up. Projects progress from a basic LED blink through GPIO manipulation, polling, interrupt-driven input, software PWM and ADC, finishing with a full nine-mode state machine that includes a reaction game and a Tetris melody. Every project targets the ATmega644P running at 20 MHz on a custom PCB designed by Richard Reeves.
 
-The `notes/` folder contains session-by-session reference notes adapted from the EE1EPJ lecture materials to match the exact hardware and programmer used here.
+The `notes/` folder contains reference notes adapted from AVR lecture materials at Aston University to match the exact hardware and programmer used here.
 
 ---
 
@@ -124,9 +127,9 @@ Source files live in both `projects/` (one folder per project) and `platformio/s
 
 <div align="center">
 
-| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/embeddedc/embeddedc-original.svg" width="65" /> | <img src="https://cdn.simpleicons.org/platformio" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/visualstudio/visualstudio-plain.svg" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width="65" /> | <img src="https://techstack-generator.vercel.app/github-icon.svg" width="65" /> |
-| :------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: |
-|                                            **C**                                             |                                                **Embedded C**                                                |                         **PlatformIO**                          |                                              **VS Code**                                               |                                              **Microchip Studio**                                               |                                             **Git**                                              |                                   **GitHub**                                    |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/embeddedc/embeddedc-original.svg" width="65" /> | <img src="https://cdn.simpleicons.org/platformio" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="65" /> | <img src="https://cdn.simpleicons.org/microchiptechnology" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width="65" /> | <img src="https://techstack-generator.vercel.app/github-icon.svg" width="65" /> |
+| :------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: |
+|                                            **C**                                             |                                                **Embedded C**                                                |                         **PlatformIO**                          |                                              **VS Code**                                               |                               **Microchip Studio**                               |                                             **Git**                                              |                                   **GitHub**                                    |
 
 </div>
 
@@ -136,7 +139,7 @@ Source files live in both `projects/` (one folder per project) and `platformio/s
 
 ## Acknowledgements
 
-**Richard Reeves**, lab technician at Aston University, designed the AVR Project PCB and provided components and guidance throughout this module.
+**Richard Reeves**, lab technician at Aston University, designed the AVR Project PCB and provided components and guidance.
 
 ---
 
@@ -144,7 +147,7 @@ Source files live in both `projects/` (one folder per project) and `platformio/s
 
 Open an issue in this repository for questions or bugs.
 
-You can also reach me directly at [contact@zacess.com](mailto:contact@zacess.com) or via [LinkedIn](https://www.linkedin.com/in/isaacadjei).
+You can also reach me directly at [contact@zacess.com](mailto:contact@zacess.com) or via my [website contact page](https://isaacadjei.me/contact).
 
 <p align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=80&section=footer" />

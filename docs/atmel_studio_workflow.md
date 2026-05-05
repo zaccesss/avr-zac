@@ -1,13 +1,13 @@
 # Atmel Studio 7 (Microchip Studio) Workflow
 
-Source: EE1EPJ Microcontrollers lab guide, Richard Reeves, Aston University, January 2024.
+Source: AVR microcontrollers guide, Richard Reeves, Aston University, January 2024.
 
 ---
 
 ## Overview
 
 Atmel Studio 7 (referred to as AS7, now rebranded as Microchip Studio) is the IDE used for
-AVR C development in EE1EPJ. It manages source files, compiler output, linker output and
+AVR C development on this project. It manages source files, compiler output, linker output and
 project configuration in a structured hierarchy.
 
 ---
@@ -31,12 +31,12 @@ project configuration in a structured hierarchy.
 AS7 organises files in a two-level hierarchy: a Solution contains one or more Projects.
 
 ```
-Solution (EE1EPJ_A.atsln)
-├── Project 1 (student-number_E1T1)
-│   ├── student-number_E1T1.c     source file
-│   └── Debug/                    compiled outputs and Proteus files
-├── Project 2 (student-number_E1T2)
-│   ├── student-number_E1T2.c
+Solution (avr-zac.atsln)
+├── Project 1 (01_blink)
+│   ├── 01_blink.c                source file
+│   └── Debug/                    compiled outputs
+├── Project 2 (02_led_cycle)
+│   ├── 02_led_cycle.c
 │   └── Debug/
 └── Project N ...
 ```
@@ -48,37 +48,32 @@ Proteus simulation files should be saved inside the project's `Debug` folder.
 
 ## Naming Convention
 
-Projects are named using the nine-digit student number followed by a four-character experiment
-and task code from the lab script.
+Projects are named using a number prefix followed by a short description matching the source file name.
 
 ```
-Format: studentnumber_ExTy
-Example: 210318542_E1T1   (Experiment 1, Task 1)
+Format: NN_description
+Example: 01_blink
 ```
 
 ---
 
 ## Setting Up a New Solution
 
-1. Create a folder called `EE1EPJ_A` on the H:\ NAS drive.
-2. Download `EE1EPJ_A.atsln` from Blackboard and save it in that folder.
-3. Open AS7. Select **File > Open > Project / Solution**.
-4. Navigate to `EE1EPJ_A` and open `EE1EPJ_A.atsln`.
-
-If AS7 shows a security warning about opening a project from a network share, click **OK**. This
-is expected behaviour on university network drives.
+1. Create a folder for the solution on your local drive.
+2. Open AS7 and select **File → Open → Project / Solution**.
+3. Navigate to the folder and open the `.atsln` file.
 
 ---
 
 ## Creating a New Project
 
-1. In Solution Explorer, right-click on **Solution 'EE1EPJ_A'**.
-2. Select **Add > New Project...**
+1. In Solution Explorer, right-click on the solution name.
+2. Select **Add → New Project...**
 3. In the Add New Project dialog:
    - Language: **C/C++** (leave as default)
    - Project type: **GCC C Executable Project**
    - Name: enter the project name using the naming convention above
-   - Location: leave as the EE1EPJ_A folder
+   - Location: leave as the solution folder
 4. Click **OK**.
 
 ---
@@ -104,7 +99,7 @@ AS7 generates a `main.c` file automatically. Rename it to match the project name
 
 1. Right-click `main.c` in Solution Explorer.
 2. Select **Rename** (or press F2).
-3. Change the name to match the project name; for example `210318542_E1T1.c`.
+3. Change the name to match the project name; for example `01_blink.c`.
 4. Ensure the `.c` extension is kept. If the syntax highlighting disappears and text turns black,
    the extension has been accidentally removed.
 
@@ -130,9 +125,6 @@ Right-click on the project you want to work on in Solution Explorer and select
 
 ## Notes
 
-- The solution file and project files are managed by AS7; do not edit `.atsln` or `.cproj`
-  files manually.
-- Build output files (`Debug/`) do not need to be backed up or committed to version control.
-- For EE1EPJ, each lab task is a separate project within the single EE1EPJ_A solution.
-- In EE2PRJ (Year 2), the same projects and AVR knowledge will be used in assessed work,
-  so keeping these files well organised is important.
+- The solution file and project files are managed by AS7; do not edit `.atsln` or `.cproj` files manually.
+- Build output files (`Debug/`) do not need to be committed to version control.
+- Each project within the solution should contain one standalone `.c` file with its own `main()`.
