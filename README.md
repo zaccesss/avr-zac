@@ -77,7 +77,7 @@ The breadboard components (LEDs, button, buzzer) are a **temporary configuration
 | 4 | `04_interrupt_buzzer.c`      | Button drives buzzer via INT0           | ISR, `EICRA`, `EIMSK`, `sei()`         |
 | 5 | `05_state_machine_basic.c`   | Four-mode state machine (initial build) | `enum`, ISR, debounce, `switch`        |
 | 6 | `06_state_machine.c`         | Nine-mode state machine (full build)    | PWM, ADC, reaction game, Tetris melody |
-| — | `fuse_test.c`                | Fuse configuration reference            | Fuse bits, clock configuration         |
+| - | `fuse_test.c`                | Fuse configuration reference            | Fuse bits, clock configuration         |
 
 Source files live in both `projects/` (one folder per project) and `platformio/src/` (all files, multi-environment build). See [WORKFLOW.md](WORKFLOW.md) for how to switch between projects in VS Code.
 
@@ -96,7 +96,7 @@ Source files live in both `projects/` (one folder per project) and `platformio/s
 | 2    | Alternate      | Odd and even LEDs alternate                      |
 | 3    | PWM Fade       | All LEDs fade in and out via software PWM        |
 | 4    | Knight Rider   | Single LED sweeps left to right and back         |
-| 5    | Binary Counter | LEDs count 0–31 in binary                        |
+| 5    | Binary Counter | LEDs count 0 to 31 in binary                     |
 | 6    | Random         | LEDs display random patterns seeded by ADC noise |
 | 7    | Reaction Game  | Press button when green LED lights to win        |
 | 8    | Tetris Melody  | Tetris theme plays with LEDs synced to each note |
@@ -136,11 +136,7 @@ Source files live in both `projects/` (one folder per project) and `platformio/s
 
 ## Acknowledgements
 
-**Richard Reeves**, lab technician and AVR mentor at Aston University, designed the AVR Project PCB, provided components and guided the project from initial setup through to interrupt-driven state machine development.
-
-**Andy Tanner**, lab technician at Aston University, shared knowledge about Nixie tube displays and microcontroller interfacing during a session.
-
-**Petro**, lecturer at Aston University, provided advice during sessions and will teach Analogue and Power Electronics in Year 2.
+**Richard Reeves**, lab technician at Aston University, designed the AVR Project PCB and provided components and guidance throughout this module.
 
 ---
 
@@ -149,11 +145,6 @@ Source files live in both `projects/` (one folder per project) and `platformio/s
 Open an issue in this repository for questions or bugs.
 
 You can also reach me directly at [contact@zacess.com](mailto:contact@zacess.com) or via [LinkedIn](https://www.linkedin.com/in/isaacadjei).
-
-<p align="center">
-  <b>Project Status:</b> Active — Year 1 EE1EPJ in progress<br>
-  <b>Last Updated:</b> May 2026
-</p>
 
 <p align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=80&section=footer" />

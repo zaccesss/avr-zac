@@ -20,9 +20,9 @@ int main(void)
 	{
 		// First blink
 		PORTB |= 1<<Test_Pin;       // LED on
-		_delay_ms(2000);             // Wait 100 ms
+		_delay_ms(2000);             // Wait 2000 ms
 		PORTB &= ~(1<<Test_Pin);    // LED off
-		_delay_ms(1000);             // Wait 100 ms
+		_delay_ms(1000);             // Wait 1000 ms
 
 		// Second blink
 		//PORTB |= 1<<Test_Pin;       // LED on
