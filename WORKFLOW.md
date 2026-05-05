@@ -65,7 +65,7 @@ Available environments:
 | `05_state_machine_basic` | `05_state_machine_basic.c` | Four-mode state machine        |
 | `05_state_machine`       | `05_state_machine.c`       | Nine-mode state machine (v1)   |
 | `06_state_machine`       | `06_state_machine.c`       | Nine-mode state machine (full) |
-| `fuse_test`              | `fuse_test.c`              | Fuse configuration reference   |
+| `00_fuse_test`           | `00_fuse_test.c`           | Fuse configuration reference   |
 
 ### Running Tasks
 
