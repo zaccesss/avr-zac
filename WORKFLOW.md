@@ -4,7 +4,7 @@ This document covers how to build and flash projects in both VS Code (PlatformIO
 
 ---
 
-## VS Code — PlatformIO
+## VS Code - PlatformIO
 
 ### Switching Between Projects
 
@@ -56,7 +56,7 @@ Flag reference:
 | `-c stk500v2` | Pololu programmer protocol                      |
 | `-p m644p`    | Target device: ATmega644P                       |
 | `-P COM4`     | COM port for the Pololu programmer              |
-| `-B 10`       | Slow ISP clock to ~50 kHz — required for Pololu |
+| `-B 10`       | Slow ISP clock to ~50 kHz, required for Pololu  |
 | `-V`          | Skip verify after flash                         |
 
 ---
@@ -118,6 +118,6 @@ See [docs/hardware_notes.md](docs/hardware_notes.md) for full fuse bit breakdown
 | Setting          | Value        | Reason                                          |
 | ---------------- | ------------ | ----------------------------------------------- |
 | `F_CPU`          | `20000000UL` | 20 MHz external crystal on this PCB             |
-| Optimisation     | `-O0`        | Disabled — allows `_delay_ms` to work correctly |
+| Optimisation     | `-O0`        | Disabled so that `_delay_ms` works correctly    |
 | Upload protocol  | `stk500v2`   | Pololu USB AVR Programmer v2.1                  |
-| ISP clock (`-B`) | `10`         | ~50 kHz — required to avoid Pololu timeouts     |
+| ISP clock (`-B`) | `10`         | ~50 kHz, required to avoid Pololu timeouts      |
