@@ -1,0 +1,7 @@
+# Normalise line endings to LF on commit, LF on checkout
+* text=auto eol=lf
+
+# Treat compiled outputs as binary
+*.hex binary
+*.elf binary
+*.bin binary
