@@ -1,6 +1,6 @@
 <!-- Header -->
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=120&section=header&text=Bare+Metal+AVR+%E2%9A%A1&fontSize=38&fontAlignY=32&fontColor=ffffff&animation=bounce" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=80&section=header&text=Bare+Metal+AVR&fontSize=28&fontAlignY=38&fontColor=ffffff" />
 </p>
 
 <p align="center">
@@ -50,7 +50,6 @@
 
 A personal project to learn bare metal AVR C development from the ground up. Projects progress from a basic LED blink through GPIO manipulation, polling, interrupt-driven input, software PWM and ADC, finishing with a full nine-mode state machine that includes a reaction game and a Tetris melody. Every project targets the ATmega644P running at 20 MHz on a custom PCB designed by Richard Reeves.
 
-The `notes/` folder contains reference notes adapted from AVR lecture materials at Aston University to match the exact hardware and programmer used here.
 
 ---
 
@@ -80,7 +79,7 @@ The breadboard components (LEDs, button, buzzer) are a **temporary configuration
 | 4 | `04_interrupt_buzzer.c`      | Button drives buzzer via INT0           | ISR, `EICRA`, `EIMSK`, `sei()`         |
 | 5 | `05_state_machine_basic.c`   | Four-mode state machine (initial build) | `enum`, ISR, debounce, `switch`        |
 | 6 | `06_state_machine.c`         | Nine-mode state machine (full build)    | PWM, ADC, reaction game, Tetris melody |
-| - | `fuse_test.c`                | Fuse configuration reference            | Fuse bits, clock configuration         |
+| - | `00_fuse_test.c`             | Fuse configuration reference            | Fuse bits, clock configuration         |
 
 Source files live in both `projects/` (one folder per project) and `platformio/src/` (all files, multi-environment build). See [WORKFLOW.md](WORKFLOW.md) for how to switch between projects in VS Code.
 
@@ -127,7 +126,7 @@ Source files live in both `projects/` (one folder per project) and `platformio/s
 
 <div align="center">
 
-| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/embeddedc/embeddedc-original.svg" width="65" /> | <img src="https://cdn.simpleicons.org/platformio" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="65" /> | <img src="https://cdn.simpleicons.org/microchiptechnology" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width="65" /> | <img src="https://techstack-generator.vercel.app/github-icon.svg" width="65" /> |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/embeddedc/embeddedc-original.svg" width="65" /> | <img src="https://cdn.simpleicons.org/platformio" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="65" /> | <img src="assets/microchip_studio.png" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width="65" /> | <img src="https://techstack-generator.vercel.app/github-icon.svg" width="65" /> |
 | :------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: |
 |                                            **C**                                             |                                                **Embedded C**                                                |                         **PlatformIO**                          |                                              **VS Code**                                               |                               **Microchip Studio**                               |                                             **Git**                                              |                                   **GitHub**                                    |
 
