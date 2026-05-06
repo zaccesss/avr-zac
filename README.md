@@ -85,15 +85,15 @@ The `-B 10` flag slows the ISP clock to ~50 kHz, which is required to avoid time
 
 | # | File | Description | Key Concepts |
 | - | ---- | ----------- | ------------ |
-| 1 | [01_blink.c](projects/01_blink/01_blink.c) | Double blink on PB0 | `DDRB`, `PORTB`, `_delay_ms` |
-| 2 | [02_led_cycle.c](projects/02_led_cycle/02_led_cycle.c) | Five LEDs cycling sequentially | Multi-pin output, bit shifting |
-| 3 | [03_button_polling.c](projects/03_button_polling/03_button_polling.c) | Button drives buzzer via polling | `PIND`, input reading, active buzzer |
-| 4 | [04_interrupt_buzzer.c](projects/04_interrupt_buzzer/04_interrupt_buzzer.c) | Button drives buzzer via INT0 | ISR, `EICRA`, `EIMSK`, `sei()` |
-| 5 | [05_state_machine_basic.c](projects/05_state_machine_basic/05_state_machine_basic.c) | Four-mode state machine (initial build) | `enum`, ISR, debounce, `switch` |
-| 6 | [06_state_machine.c](projects/06_state_machine/06_state_machine.c) | Nine-mode state machine (full build) | PWM, ADC, reaction game, Tetris melody |
-| 0 | [00_fuse_test.c](projects/00_fuse_test/00_fuse_test.c) | Fuse configuration and restoration reference | Fuse bits, clock source, avrdude `-F` flag |
+| 1 | [01_blink.c](projects/learning_projects/01_blink/01_blink.c) | Double blink on PB0 | `DDRB`, `PORTB`, `_delay_ms` |
+| 2 | [02_led_cycle.c](projects/learning_projects/02_led_cycle/02_led_cycle.c) | Five LEDs cycling sequentially | Multi-pin output, bit shifting |
+| 3 | [03_button_polling.c](projects/learning_projects/03_button_polling/03_button_polling.c) | Button drives buzzer via polling | `PIND`, input reading, active buzzer |
+| 4 | [04_interrupt_buzzer.c](projects/learning_projects/04_interrupt_buzzer/04_interrupt_buzzer.c) | Button drives buzzer via INT0 | ISR, `EICRA`, `EIMSK`, `sei()` |
+| 5 | [05_state_machine_basic.c](projects/learning_projects/05_state_machine_basic/05_state_machine_basic.c) | Four-mode state machine (initial build) | `enum`, ISR, debounce, `switch` |
+| 6 | [06_state_machine.c](projects/learning_projects/06_state_machine/06_state_machine.c) | Nine-mode state machine (full build) | PWM, ADC, reaction game, Tetris melody |
+| 0 | [00_fuse_test.c](projects/learning_projects/00_fuse_test/00_fuse_test.c) | Fuse configuration and restoration reference | Fuse bits, clock source, avrdude `-F` flag |
 
-Source files live in both [`projects/`](projects/) (one folder per project) and [`platformio/src/`](platformio/src/) (all files together for the multi-environment build). See [WORKFLOW.md](WORKFLOW.md) for how to switch between environments in VS Code.
+Source files live in [`projects/learning_projects/`](projects/learning_projects/) (one folder per project). The active project is also copied into [`platformio/src/`](platformio/src/) for building. See [WORKFLOW.md](WORKFLOW.md) for how to switch between projects.
 
 ---
 
@@ -101,7 +101,7 @@ Source files live in both [`projects/`](projects/) (one folder per project) and 
 
 ## State Machine Modes
 
-[`06_state_machine.c`](projects/06_state_machine/06_state_machine.c) cycles through nine modes on each button press. Mode state is held in a `volatile` variable updated inside an INT0 ISR with software debounce.
+[`06_state_machine.c`](projects/learning_projects/06_state_machine/06_state_machine.c) cycles through nine modes on each button press. Mode state is held in a `volatile` variable updated inside an INT0 ISR with software debounce.
 
 | Mode | Name           | Description                                      |
 | ---- | -------------- | ------------------------------------------------ |
