@@ -6,11 +6,24 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
-### Changed
-- Documentation Hub in README restructured into a session notes table and a general reference section
-- `docs/c_operators.md` cleaned up: removed stale attribution line
-
 ### Added
+- `.editorconfig` at repo root: UTF-8, LF line endings, 4-space indent, trim trailing whitespace
+- `projects/lab_projects/`, `projects/personal_projects/`, `projects/practice_projects/`, `projects/other_projects/` — empty category folders for future work
+- Breadboard Setup section in every lab file (sessions 1-8) with PCB header pin, component and wiring instructions for replicating each circuit on breadboard
+
+### Changed
+- `projects/` restructured: all source projects moved into `projects/learning_projects/` (one folder per project)
+- `platformio/src/` reduced to a single active file (`06_state_machine.c`); all other `.c` files removed
+- `platformio/platformio.ini` rewritten to a single environment (`06_state_machine`) with a `[common]` base section; inline comments explain how to switch projects
+- `WORKFLOW.md` switching guide updated for the single-file-in-src approach with project folder table
+- README project table links and source file description updated to reflect `projects/learning_projects/` layout
+- All em and en dashes replaced across sessions 1-8 notes and labs, `notes/general/`, `docs/hardware_notes.md` and `docs/wiring.md`
+- Inline code comments expanded across all session notes and lab task code blocks to fully explain register fields, bit manipulation and timing calculations
+- `docs/hardware_notes.md` UART0 section updated: FTDI lead reference replaced with Pololu USB AVR Programmer v2.1 built-in UART bridge description
+- Documentation Hub in README restructured into a session notes table and a general reference section
+- `notes/general/c_operators.md` cleaned up: removed stale attribution line
+
+### Added (previous unreleased)
 - `CHANGELOG.md` (this file)
 
 ---
