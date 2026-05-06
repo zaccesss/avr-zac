@@ -1,7 +1,5 @@
 # C Operators Reference
 
-Source: AVR reference sheet, Richard Reeves, Aston University.
-
 ---
 
 ## Arithmetic Operators

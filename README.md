@@ -124,11 +124,31 @@ Source files live in both [`projects/`](projects/) (one folder per project) and 
 | Document | Description |
 | -------- | ----------- |
 | [Build and Flash Workflow](WORKFLOW.md) | Full VS Code/PlatformIO and Microchip Studio setup, environment switching, build tasks and troubleshooting |
-| [Session Notes](notes/) | Reference notes covering GPIO, timers, interrupts, PWM, ADC and state machines |
 | [Wiring Reference](docs/wiring.md) | Current breadboard connections and header pin tables |
 | [Hardware Notes](docs/hardware_notes.md) | Fuse settings, ISP clock speed, register map and ADC configuration |
-| [C Operators Reference](docs/c_operators.md) | Arithmetic, bitwise, relational and assignment operator tables with AVR examples |
 | [PCB Full Reference](hardware/pcb_notes.md) | Component list, connector pinout, power supply circuit and soldering order |
+
+### Session Notes
+
+Each session has a `notes.md` (reference) and a `lab.md` (hands-on tasks).
+
+| Session | Topic | Notes | Lab |
+| ------- | ----- | ----- | --- |
+| 1 | Introduction to AVR C | [notes](notes/session_01/notes.md) | [lab](notes/session_01/lab.md) |
+| 2 | Bit Shifting, Arrays and Data Types | [notes](notes/session_02/notes.md) | [lab](notes/session_02/lab.md) |
+| 3 | Inputs, Bit Masking and Interrupts | [notes](notes/session_03/notes.md) | [lab](notes/session_03/lab.md) |
+| 4 | Timers: Overflow and Output Compare | [notes](notes/session_04/notes.md) | [lab](notes/session_04/lab.md) |
+| 5 | Hardware PWM | [notes](notes/session_05/notes.md) | [lab](notes/session_05/lab.md) |
+| 6 | UART Serial Transmission | [notes](notes/session_06/notes.md) | [lab](notes/session_06/lab.md) |
+| 7 | Analogue to Digital Conversion | [notes](notes/session_07/notes.md) | [lab](notes/session_07/lab.md) |
+| 8 | UART Serial Reception | [notes](notes/session_08/notes.md) | [lab](notes/session_08/lab.md) |
+
+### General Reference
+
+| Document | Description |
+| -------- | ----------- |
+| [C Operators Reference](notes/general/c_operators.md) | Arithmetic, bitwise, relational and assignment operator tables with AVR examples and precedence table |
+| [Hardware Reference](notes/general/hardware.md) | PCB overview, power supply, headers (J1 to J7), crystal, fuse summary and component list |
 
 ---
 
