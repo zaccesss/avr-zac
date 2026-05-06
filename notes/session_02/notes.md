@@ -78,7 +78,7 @@ The parentheses around `(1<<PB0)` before the tilde are essential. Without them t
 
 ```c
 PORTB &= ~(1<<PB0);     // Correct
-PORTB &= ~1<<PB0;       // Wrong — inverts 1 first, then shifts
+PORTB &= ~1<<PB0;       // Wrong - inverts 1 first, then shifts
 ```
 
 ### Clearing multiple bits
@@ -209,7 +209,7 @@ typedef enum {
     MODE_BLINK_ALL,     // Value 1
     MODE_ALTERNATE,     // Value 2
     MODE_PWM_FADE,      // Value 3
-    MODE_COUNT          // Value 4 — useful as a total count
+    MODE_COUNT          // Value 4, useful as a total count
 } LED_Mode;
 ```
 
@@ -265,7 +265,5 @@ PORTB = PIND;               // Short form: copy PIND directly to PORTB
 
 ## Linked Project Files
 
-- [projects/01_blink/01_blink.c](../../projects/01_blink/01_blink.c)
-- [projects/02_led_cycle/02_led_cycle.c](../../projects/02_led_cycle/02_led_cycle.c)
-- [platformio/src/01_blink.c](../../platformio/src/01_blink.c)
-- [platformio/src/02_led_cycle.c](../../platformio/src/02_led_cycle.c)
+- [projects/learning_projects/01_blink/01_blink.c](../../projects/learning_projects/01_blink/01_blink.c)
+- [projects/learning_projects/02_led_cycle/02_led_cycle.c](../../projects/learning_projects/02_led_cycle/02_led_cycle.c)

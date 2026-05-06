@@ -25,3 +25,6 @@ $RECYCLE.BIN/
 
 # macOS
 .DS_Store
+
+# University source folder - local only, not for version control
+EE1EPJ - AVR - Microcontrollers/

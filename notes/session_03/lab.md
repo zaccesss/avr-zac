@@ -12,6 +12,45 @@ Read a digital input via polling and via an external interrupt, compare the two 
 
 ---
 
+## Breadboard Setup
+
+This session uses five LEDs on PORTB, a push button on PD2 and an active buzzer on PD3.
+
+**Header J4 (PORTB, 10-way) - LEDs:**
+- Pin 1: VCC rail supply
+- Pin 2: PB0 - Red LED via 220R resistor
+- Pin 3: PB1 - Yellow LED via 220R resistor
+- Pin 4: PB2 - White LED via 220R resistor
+- Pin 5: PB3 - Green LED via 220R resistor
+- Pin 6: PB4 - Blue LED via 220R resistor
+- Pin 10: GND rail supply
+
+**LED wiring (same for each LED):**
+- Anode (long leg) connects via a 220R resistor to the header pin
+- Cathode (short leg) connects directly to the GND rail
+
+**Header J6 (PORTD, 10-way) - Button and Buzzer:**
+- Pin 1: GND
+- Pin 4: PD2 (INT0) - push button input with pull-down
+- Pin 5: PD3 - active buzzer positive terminal
+- Pin 10: VCC
+
+**Button wiring (PD2):**
+- One leg of the push button connects to the VCC rail
+- Other leg connects to J6 pin 4 (PD2)
+- A 10kR pull-down resistor connects from J6 pin 4 (PD2) to the GND rail
+- When the button is open, PD2 is held LOW by the resistor; when pressed, PD2 is pulled HIGH
+
+**Buzzer wiring (PD3):**
+- Active buzzer positive terminal connects to J6 pin 5 (PD3)
+- Active buzzer negative terminal connects to the GND rail
+
+**Rails:**
+- VCC rail: wire from J4 pin 1 (or J6 pin 10) to the positive rail on the breadboard
+- GND rail: wire from J4 pin 10 (or J6 pin 1) to the negative rail on the breadboard
+
+---
+
 ## Wiring Checks
 
 1. Button connected between VCC and PD2 (J6 pin 4) with 10kR pull-down to GND.
@@ -23,7 +62,7 @@ Read a digital input via polling and via an external interrupt, compare the two 
 
 ## Task 1 - Read Port D and Confirm Button State
 
-Select environment `03_button_polling` and open [platformio/src/03_button_polling.c](../../platformio/src/03_button_polling.c).
+Select environment `03_button_polling` and open [projects/learning_projects/03_button_polling/03_button_polling.c](../../projects/learning_projects/03_button_polling/03_button_polling.c).
 
 Trace through the code and answer:
 
@@ -75,7 +114,7 @@ Record your observations. The purpose of this task is to demonstrate the fundame
 
 ## Task 4 - External Interrupt on INT0
 
-Select environment `04_interrupt_buzzer` and open [platformio/src/04_interrupt_buzzer.c](../../platformio/src/04_interrupt_buzzer.c).
+Select environment `04_interrupt_buzzer` and open [projects/learning_projects/04_interrupt_buzzer/04_interrupt_buzzer.c](../../projects/learning_projects/04_interrupt_buzzer/04_interrupt_buzzer.c).
 
 Trace through the initialisation code line by line using the notes and the EICRA table:
 

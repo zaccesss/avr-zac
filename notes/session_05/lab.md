@@ -30,6 +30,25 @@ Write both answers above before starting.
 
 ---
 
+## Breadboard Setup
+
+This session uses Timer 0 hardware PWM on two output pins only. No other LEDs or peripherals are needed.
+
+**Components required:**
+- 1x green LED with a 330 Ω current-limiting resistor
+- 1x blue LED with a 330 Ω current-limiting resistor
+- Jumper wires
+
+**Connections:**
+- J4 pin 1 (VCC) → positive power rail on breadboard
+- J4 pin 10 (GND) → negative power rail on breadboard
+- J4 pin 5 (PB3, OC0A) → anode of green LED → cathode → 330 Ω resistor → GND rail
+- J4 pin 6 (PB4, OC0B) → anode of blue LED → cathode → 330 Ω resistor → GND rail
+
+No UART header, no potentiometer and no other components are needed for this session.
+
+---
+
 ## Task 1 - Fixed Duty Cycle on Blue LED
 
 Write a programme that drives OC0B (PB4, blue LED) at approximately 25% duty cycle:
@@ -188,10 +207,10 @@ Adjust the delay to produce a 50 Hz waveform and recalculate.
 
 ## Quick Fault Isolation
 
-- **LED stays fully off** — COM0B1 not set in TCCR0A, or DDR bit not set. Check both.
-- **LED stays fully on** — WGM bits wrong. Confirm WGM01=1 and WGM00=1 in TCCR0A.
-- **Fade is not smooth** — step delay too large. Reduce delay value or increase table length.
-- **Both LEDs behave the same** — COM0A1 missing for the green channel. Add it to TCCR0A.
+- **LED stays fully off**: COM0B1 not set in TCCR0A, or DDR bit not set. Check both.
+- **LED stays fully on**: WGM bits wrong. Confirm WGM01=1 and WGM00=1 in TCCR0A.
+- **Fade is not smooth**: step delay too large. Reduce delay value or increase table length.
+- **Both LEDs behave the same**: COM0A1 missing for the green channel. Add it to TCCR0A.
 
 ---
 

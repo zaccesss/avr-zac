@@ -36,7 +36,7 @@ Once PlatformIO is installed, open the `platformio/` folder in VS Code (not the 
 
 ### How Environments Work
 
-`platformio.ini` defines one environment per project using `build_src_filter`. Each environment compiles only its own source file and ignores all others in `platformio/src/`. The `[common]` section holds shared settings (board, upload protocol, build flags) so they only need to be written once.
+`platformio.ini` defines a single active environment. The `build_src_filter` line tells PlatformIO which source file to compile. All other settings (board, upload protocol, build flags) come from the `[common]` section.
 
 ```ini
 [env:06_state_machine]
@@ -44,28 +44,27 @@ extends = common
 build_src_filter = -<*> +<06_state_machine.c>
 ```
 
-`-<*>` excludes everything. `+<filename.c>` then adds back only the one file for that environment.
+`-<*>` excludes every file in `src/`. `+<filename.c>` adds back the one file for this build.
 
 ### Switching Between Projects
 
-1. Look at the **status bar at the bottom left** of VS Code. It shows the currently active environment, for example `env:06_state_machine`.
-2. Click it to open the environment picker.
-3. Select the environment you want to build.
+Only one `.c` file lives in `platformio/src/` at a time. To switch to a different project:
 
-You can also switch from the **PlatformIO sidebar** (ant icon on the left): expand the environment name and click **Build** or **Upload** directly.
+1. Delete the current `.c` file from `platformio/src/`.
+2. Copy the new project's `.c` file from `projects/learning_projects/<name>/` into `platformio/src/`.
+3. Update the `[env:...]` block name and `build_src_filter` in `platformio.ini` to match.
+4. Update `default_envs` at the top of `platformio.ini` if needed.
+5. Run **Build and Upload** from the VS Code task menu.
 
-Available environments:
+Project files live in:
 
-| Environment              | Source file                | Description                    |
-| ------------------------ | -------------------------- | ------------------------------ |
-| `01_blink`               | `01_blink.c`               | Double blink on PB0            |
-| `02_led_cycle`           | `02_led_cycle.c`           | Five LEDs cycling              |
-| `03_button_polling`      | `03_button_polling.c`      | Button polling                 |
-| `04_interrupt_buzzer`    | `04_interrupt_buzzer.c`    | INT0 interrupt                 |
-| `05_state_machine_basic` | `05_state_machine_basic.c` | Four-mode state machine        |
-| `05_state_machine`       | `05_state_machine.c`       | Nine-mode state machine (v1)   |
-| `06_state_machine`       | `06_state_machine.c`       | Nine-mode state machine (full) |
-| `00_fuse_test`           | `00_fuse_test.c`           | Fuse configuration reference   |
+| Folder | Contents |
+| ------ | -------- |
+| `projects/learning_projects/` | Session learning projects (01 through 06, 00_fuse_test) |
+| `projects/lab_projects/` | Lab exercises (empty, for future use) |
+| `projects/personal_projects/` | Personal projects (empty, for future use) |
+| `projects/practice_projects/` | Practice exercises (empty, for future use) |
+| `projects/other_projects/` | Miscellaneous (empty, for future use) |
 
 ### Running Tasks
 
@@ -81,9 +80,10 @@ Tasks are defined in `platformio/.vscode/tasks.json`. The Build task calls `pio 
 
 ### Adding a New Project
 
-1. Add the source `.c` file to `platformio/src/`.
-2. Also add a copy to `projects/<name>/` to keep the projects folder consistent.
-3. Add a new environment block to `platformio.ini`:
+1. Create a folder for the new project in the appropriate category under `projects/` (e.g. `projects/personal_projects/my_project/`).
+2. Write the `.c` file there.
+3. Copy it into `platformio/src/` (replacing the current file).
+4. Update `platformio.ini`:
 
 ```ini
 [env:my_new_project]
@@ -91,7 +91,8 @@ extends = common
 build_src_filter = -<*> +<my_new_project.c>
 ```
 
-4. Switch to the new environment from the status bar and run Build and Upload.
+5. Update `default_envs = my_new_project` at the top of `platformio.ini`.
+6. Switch to the new environment from the status bar and run Build and Upload.
 
 ### Manual avrdude Command
 

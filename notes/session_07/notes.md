@@ -64,9 +64,9 @@ uint16_t result = ADC;      // Reads ADCL then ADCH automatically
 
 ## ADMUX Register
 
-- **REFS1, REFS0** — reference selection; 0, 1 = AVCC reference (JP1 fitted)
-- **ADLAR** — result adjustment; 0 = right-adjust (default), 1 = left-adjust
-- **MUX4 to MUX0** — channel select; 00000 = ADC0, 00001 = ADC1, and so on
+- **REFS1, REFS0**: reference selection; 0, 1 = AVCC reference (JP1 fitted)
+- **ADLAR**: result adjustment; 0 = right-adjust (default), 1 = left-adjust
+- **MUX4 to MUX0**: channel select; 00000 = ADC0, 00001 = ADC1 and so on
 
 For AVCC reference on ADC0 (PA0):
 
@@ -84,10 +84,10 @@ ADMUX = (1<<REFS0) | (1<<MUX1);    // AVCC reference, channel 2
 
 ## ADCSRA Register
 
-- **ADEN** — ADC enable; set to 1 to power on the ADC
-- **ADSC** — start conversion; set to 1 to begin, hardware clears it when done
-- **ADIF** — interrupt flag; set by hardware when conversion completes
-- **ADPS2 to ADPS0** — prescaler bits; divide f_clock to produce the ADC clock
+- **ADEN**: ADC enable; set to 1 to power on the ADC
+- **ADSC**: start conversion; set to 1 to begin; hardware clears it when done
+- **ADIF**: interrupt flag; set by hardware when conversion completes
+- **ADPS2 to ADPS0**: prescaler bits; divide f_clock to produce the ADC clock
 
 The ADC clock must be between 50kHz and 200kHz for full 10-bit accuracy. At 20 MHz:
 
@@ -109,16 +109,16 @@ Use prescaler 128 (ADPS2=1, ADPS1=1, ADPS0=1) for full accuracy at 20 MHz.
 
 void adc_init(void)
 {
-    ADMUX  = (1<<REFS0);                            // AVCC reference, ADC0
-    ADCSRA = (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);  // Enable, prescale 128
-    DIDR0  = 0xFF;                                  // Disable digital input on ADC pins
+    ADMUX  = (1<<REFS0);                                        // REFS0=1, REFS1=0: use AVCC as reference (JP1 must be fitted); MUX bits 0 = ADC0
+    ADCSRA = (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0); // ADEN: power on ADC; ADPS2..0 = 111: prescaler /128 (156.25 kHz at 20 MHz)
+    DIDR0  = 0xFF;                                              // Disable digital input buffers on all ADC pins to reduce noise and power
 }
 
 uint16_t adc_read(void)
 {
-    ADCSRA |= (1<<ADSC);                            // Start conversion
-    while (ADCSRA & (1<<ADSC));                     // Wait for ADSC to clear
-    return ADC;                                     // Return 10-bit result
+    ADCSRA |= (1<<ADSC);                                        // Set ADSC to begin a single conversion; hardware clears it when done
+    while (ADCSRA & (1<<ADSC));                                 // Busy-wait until ADSC is cleared by hardware (approx 104 µs at prescaler 128)
+    return ADC;                                                 // Read the combined 16-bit ADC register (reads ADCL then ADCH in correct order)
 }
 ```
 
@@ -202,53 +202,53 @@ This technique is already used in the state machine project for the random LED m
 #include <stdio.h>
 #include <string.h>
 
-char uart_buffer[30];
+char uart_buffer[30];               // Buffer for sprintf-formatted output strings
 
 void uart_init(void)
 {
-    UBRR0  = 129;
-    UCSR0B = (1<<TXEN0);
+    UBRR0  = 129;                                               // 9600 baud at 20 MHz: (20000000 / (16 x 9600)) - 1 = 129
+    UCSR0B = (1<<TXEN0);                                        // Enable transmitter; PD1 (TXD) taken over by USART hardware
 }
 
 void transmit_char(char c)
 {
-    while (!(UCSR0A & (1<<UDRE0)));
-    UDR0 = c;
+    while (!(UCSR0A & (1<<UDRE0)));                             // Wait until transmit data register is empty before writing
+    UDR0 = c;                                                   // Write character to transmit buffer; USART sends it automatically
 }
 
 void transmit_string(char str[])
 {
-    uint8_t len = strlen(str);
-    for(uint8_t i = 0; i < len; i++) transmit_char(str[i]);
+    uint8_t len = strlen(str);                                  // Measure string length (excludes null terminator)
+    for(uint8_t i = 0; i < len; i++) transmit_char(str[i]);     // Send each character through the safe wrapper
 }
 
 void adc_init(void)
 {
-    ADMUX  = (1<<REFS0);
-    ADCSRA = (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);
-    DIDR0  = 0xFF;
+    ADMUX  = (1<<REFS0);                                        // AVCC reference (JP1 fitted); channel 0 (ADC0, PA0)
+    ADCSRA = (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0); // Enable ADC; prescaler /128 gives 156.25 kHz ADC clock
+    DIDR0  = 0xFF;                                              // Disable digital input buffers on all PORTA pins
 }
 
 uint16_t adc_read(void)
 {
-    ADCSRA |= (1<<ADSC);
-    while (ADCSRA & (1<<ADSC));
-    return ADC;
+    ADCSRA |= (1<<ADSC);                                        // Start a single conversion
+    while (ADCSRA & (1<<ADSC));                                 // Wait for hardware to clear ADSC when conversion is complete
+    return ADC;                                                 // Return 10-bit result via combined ADC macro
 }
 
 int main(void)
 {
-    DDRB |= 0x1F;       // PB0 to PB4 as outputs
+    DDRB |= 0x1F;                                               // PB0 to PB4 as outputs (five LEDs on J4)
 
-    uart_init();
-    adc_init();
+    uart_init();                                                // Initialise USART0 at 9600 baud
+    adc_init();                                                 // Initialise ADC on ADC0 (PA0) with AVCC reference
 
     while (1)
     {
-        uint16_t reading = adc_read();
-        sprintf(uart_buffer, "ADC0: %u\r\n", reading);
-        transmit_string(uart_buffer);
-        _delay_ms(200);
+        uint16_t reading = adc_read();                          // Perform a single-shot ADC conversion
+        sprintf(uart_buffer, "ADC0: %u\r\n", reading);         // Format reading as decimal string with newline
+        transmit_string(uart_buffer);                           // Send formatted string to PC terminal
+        _delay_ms(200);                                         // Wait 200 ms before next reading (5 readings per second)
     }
 }
 ```

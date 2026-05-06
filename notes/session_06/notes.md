@@ -4,14 +4,14 @@
 
 ## What is UART
 
-UART (Universal Asynchronous Receiver Transmitter) is a serial communication protocol that transmits data one bit at a time over a single wire. It is asynchronous because there is no shared clock line — both ends agree on the baud rate in advance.
+UART (Universal Asynchronous Receiver Transmitter) is a serial communication protocol that transmits data one bit at a time over a single wire. It is asynchronous because there is no shared clock line; both ends agree on the baud rate in advance.
 
 Standard settings for this project are **9600 8-N-1**:
 
-- **9600** — baud rate (bits per second)
-- **8** — data bits per frame
-- **N** — no parity bit
-- **1** — one stop bit
+- **9600**: baud rate (bits per second)
+- **8**: data bits per frame
+- **N**: no parity bit
+- **1**: one stop bit
 
 The ATmega644P has two hardware UART peripherals: USART0 and USART1. This session uses USART0, whose TX pin is PD1 and RX pin is PD0. These pins connect to J7 (the Molex KK UART header).
 
@@ -26,10 +26,10 @@ The Pololu USB AVR Programmer v2.1 includes a built-in USB-to-UART bridge. When 
 
 Connect the UART header J7 to the Pololu programmer:
 
-- Black (GND) — GND
-- Orange — RXD into AVR (output from lead)
-- Yellow — TXD out of AVR (input to lead)
-- Red (VCC) — VCC from PCB
+- Black (GND): GND
+- Orange: RXD into AVR (output from lead)
+- Yellow: TXD out of AVR (input to lead)
+- Red (VCC): VCC from PCB
 
 To view received data, use a serial terminal such as Atmel Studio's Data Visualizer or any terminal application set to 9600 8-N-1 on the correct COM port.
 
@@ -62,10 +62,10 @@ actual = 20000000 / (16 x 130) = 9615 baud   (error: 0.16%, within tolerance)
 | Register | Purpose                                              |
 | -------- | ---------------------------------------------------- |
 | `UBRR0`  | Baud rate register (16-bit, set once during init)    |
-| `UCSR0A` | Status register — check UDRE0 before transmitting    |
-| `UCSR0B` | Control register — enable TX, RX and interrupts      |
-| `UCSR0C` | Frame format — defaults to 8-N-1 at reset, leave it  |
-| `UDR0`   | Data register — write to transmit, read to receive   |
+| `UCSR0A` | Status register: check UDRE0 before transmitting     |
+| `UCSR0B` | Control register: enable TX, RX and interrupts       |
+| `UCSR0C` | Frame format: defaults to 8-N-1 at reset, leave it   |
+| `UDR0`   | Data register: write to transmit, read to receive    |
 
 `UCSR0C` is configured correctly for 8-N-1 at reset. Do not write to it.
 
@@ -162,41 +162,41 @@ The escape sequences `\r\n` (carriage return, line feed) move the terminal curso
 #include <stdio.h>
 #include <string.h>
 
-char uart_buffer[30];
-int count = 0;
+char uart_buffer[30];               // Buffer for sprintf-formatted output strings
+int count = 0;                      // Counter variable transmitted each cycle
 
 void transmit_char(char c)
 {
-    while (!(UCSR0A & (1<<UDRE0)));
-    UDR0 = c;
+    while (!(UCSR0A & (1<<UDRE0))); // Wait until transmit data register is empty
+    UDR0 = c;                       // Write character to transmit buffer; hardware sends it
 }
 
 void transmit_string(char str[])
 {
-    uint8_t len = strlen(str);
+    uint8_t len = strlen(str);      // Get string length excluding null terminator
     for(uint8_t i = 0; i < len; i++)
     {
-        transmit_char(str[i]);
+        transmit_char(str[i]);      // Send one character at a time using the safe wrapper
     }
 }
 
 void uart_init(void)
 {
-    UBRR0  = 129;
-    UCSR0B = (1<<TXEN0);
+    UBRR0  = 129;                   // Baud rate register: 9600 baud at 20 MHz
+    UCSR0B = (1<<TXEN0);            // Enable transmitter only; no RX needed here
 }
 
 int main(void)
 {
-    uart_init();
+    uart_init();                    // Set up USART0 before using it
 
     while (1)
     {
-        sprintf(uart_buffer, "Count: %d\r\n", count);
-        transmit_string(uart_buffer);
-        count++;
-        if (count > 15) count = 0;
-        _delay_ms(500);
+        sprintf(uart_buffer, "Count: %d\r\n", count);  // Format count as decimal string with newline
+        transmit_string(uart_buffer);                   // Send formatted string via UART
+        count++;                                        // Increment counter each cycle
+        if (count > 15) count = 0;                      // Reset to 0 after reaching 15
+        _delay_ms(500);                                 // Wait 500 ms between transmissions
     }
 }
 ```
@@ -205,7 +205,7 @@ int main(void)
 
 ## Timer-Triggered Transmission
 
-Transmitting from the main loop with `_delay_ms()` is simple but inaccurate. A Timer 1 CTC interrupt can trigger transmission at a precise, known interval — combining the techniques from session 4 with the UART from this session.
+Transmitting from the main loop with `_delay_ms()` is simple but inaccurate. A Timer 1 CTC interrupt can trigger transmission at a precise, known interval, combining the techniques from session 4 with the UART from this session.
 
 The ISR increments a counter and formats a string. The main loop stays empty:
 
@@ -230,8 +230,8 @@ The variable must be `volatile` because the ISR writes it and the compiler canno
 ## Practical Checklist
 
 1. Set UBRR0 before enabling TXEN0.
-2. Enable only the peripherals being used — do not enable RXEN0 if not receiving.
+2. Enable only the peripherals being used; do not enable RXEN0 if not receiving.
 3. Always wait for UDRE0 before writing to UDR0.
-4. Keep UCSR0C at its default value — do not write to it.
+4. Keep UCSR0C at its default value; do not write to it.
 5. Declare variables shared between an ISR and the main loop as `volatile`.
 6. Use `\r\n` at the end of each transmitted line for terminal compatibility.

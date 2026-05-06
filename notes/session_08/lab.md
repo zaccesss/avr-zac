@@ -22,6 +22,44 @@ Enable the USART0 receiver and use the receive-complete interrupt to control LED
 
 ---
 
+## Breadboard Setup
+
+This session uses UART reception, ADC input and LED outputs together.
+
+**Components required:**
+- 1x red LED with a 330 Ω current-limiting resistor (PB0)
+- 1x yellow LED with a 330 Ω current-limiting resistor (PB1)
+- 1x white LED with a 330 Ω current-limiting resistor (PB2)
+- 1x green LED with a 330 Ω current-limiting resistor (PB3)
+- 1x blue LED with a 330 Ω current-limiting resistor (PB4)
+- 1x 10 kΩ potentiometer
+- 4-wire connection from J7 to the Pololu USB AVR Programmer v2.1 UART port
+- JP1 jumper fitted on the PCB
+
+**LED connections (J4, PORTB header):**
+- J4 pin 1 (VCC) → positive power rail on breadboard
+- J4 pin 10 (GND) → negative power rail on breadboard
+- J4 pin 2 (PB0) → anode of red LED → cathode → 330 Ω resistor → GND rail
+- J4 pin 3 (PB1) → anode of yellow LED → cathode → 330 Ω resistor → GND rail
+- J4 pin 4 (PB2) → anode of white LED → cathode → 330 Ω resistor → GND rail
+- J4 pin 5 (PB3) → anode of green LED → cathode → 330 Ω resistor → GND rail
+- J4 pin 6 (PB4) → anode of blue LED → cathode → 330 Ω resistor → GND rail
+
+**Potentiometer connections (J3, PORTA/ADC header):**
+- Outer leg 1 → VCC (J3 pin 1)
+- Outer leg 2 → GND (J3 pin 10)
+- Wiper → PA0 (J3 pin 2, ADC0)
+
+**UART connections (J7 Molex KK header to Pololu programmer UART port):**
+- Black wire (GND): J7 GND → Pololu programmer GND
+- Orange wire: J7 PD0 (RXD into AVR) → Pololu programmer UART TX output
+- Yellow wire: J7 PD1 (TXD from AVR) → Pololu programmer UART RX input
+- Red wire (VCC): J7 VCC → Pololu programmer VCC
+
+**JP1 must be fitted** to connect AVCC as the ADC reference voltage.
+
+---
+
 ## Task 1 - Enable the Receiver and Test Reception
 
 Start from the UART programme from session 6. Add RXEN0 and RXCIE0 to the uart_init function:
@@ -180,11 +218,11 @@ Pass criteria:
 
 ## Quick Fault Isolation
 
-- **No response to received characters** — RXEN0 or RXCIE0 not set, or sei() missing.
-- **Characters received but ISR seems to fire twice** — check the terminal is not sending CRLF after each character.
-- **Blue LED stops blinking when typing** — ISR is taking too long; move processing out of the ISR via a flag.
-- **ADC returns 0 in Task 4** — adc_init() not called or ADMUX not set.
-- **Compile error on USART0_RX_vect** — include avr/interrupt.h.
+- **No response to received characters**: RXEN0 or RXCIE0 not set, or sei() missing.
+- **Characters received but ISR seems to fire twice**: check the terminal is not sending CRLF after each character.
+- **Blue LED stops blinking when typing**: ISR is taking too long; move processing out of the ISR via a flag.
+- **ADC returns 0 in Task 4**: adc_init() not called or ADMUX not set.
+- **Compile error on USART0_RX_vect**: include avr/interrupt.h.
 
 ---
 

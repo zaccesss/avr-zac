@@ -132,10 +132,10 @@ In PlatformIO, `F_CPU` is injected via build flags in platformio.ini so the `#de
 
 int main(void)
 {
-    // Initialisation — runs once after reset
-    DDRB = (1<<PB0)|(1<<PB1)|(1<<PB2)|(1<<PB3)|(1<<PB4);
+    // Initialisation - runs once after reset
+    DDRB = (1<<PB0)|(1<<PB1)|(1<<PB2)|(1<<PB3)|(1<<PB4); // Set PB0-PB4 as outputs for the five LEDs
 
-    // Main loop — must never exit
+    // Main loop - must never exit
     while (1)
     {
         // Repeat forever
@@ -143,7 +143,7 @@ int main(void)
 }
 ```
 
-`while(1)` loops because 1 is always true. The CPU must never reach the closing brace of `main()` — on a microcontroller that causes a crash or reset.
+`while(1)` loops because 1 is always true. The CPU must never reach the closing brace of `main()`; on a microcontroller that causes a crash or reset.
 
 ### Setting and clearing individual bits
 
@@ -168,7 +168,7 @@ The bit-shift `(1<<PBx)` creates a mask with only bit x set. OR-assign sets the 
 
 int main(void)
 {
-    DDRB = (1<<Blue_LED);
+    DDRB = (1<<Blue_LED);   // Set the blue LED pin as an output
 
     while (1)
     {
@@ -241,11 +241,11 @@ Counter = 0
 ```
 
 ```c
-int counter = 0;
+int counter = 0;        // Initialise counter to 0
 while (1)
 {
-    counter++;
-    if (counter > 6) counter = 1;
+    counter++;          // Advance the counter by 1
+    if (counter > 6) counter = 1;  // Wrap back to 1 once past 6
 }
 ```
 
@@ -270,7 +270,7 @@ Simulation is useful for checking register state and logic flow. It does not sim
 
 ## Reference
 
-- [Hardware reference](../general/hardware.md) — PCB connectors, power supply, fuse settings
-- [C operators](../general/c_operators.md) — full operator reference and precedence table
-- [Wiring reference](../../docs/wiring.md) — current breadboard connections
-- [Atmel Studio workflow](../../docs/atmel_studio_workflow.md) — full project setup guide
+- [Hardware reference](../general/hardware.md) - PCB connectors, power supply, fuse settings
+- [C operators](../general/c_operators.md) - full operator reference and precedence table
+- [Wiring reference](../../docs/wiring.md) - current breadboard connections
+- [Atmel Studio workflow](../../docs/atmel_studio_workflow.md) - full project setup guide
