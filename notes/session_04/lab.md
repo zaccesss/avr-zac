@@ -1,71 +1,201 @@
-# Session 4 Lab - External Interrupts with INT0
+# Session 4 Lab - Timers: Overflow and Output Compare
 
-Hardware target: ATmega644P, button on PD2, buzzer on PD3.
+Hardware: ATmega644P on Richard Reeves AVR PCB 2018.
+Programmer: Pololu USB AVR Programmer v2.1 on COM4.
+Clock: 20 MHz external crystal.
+
+---
 
 ## Lab Goal
 
-Use INT0 to respond to button events without constant polling in the main loop.
+Use Timer 1 to generate precise timed events without blocking the CPU, first in overflow mode then in output-compare (CTC) mode.
 
-## Register Setup to Verify
+---
 
-1. `EICRA` configured for falling edge:
+## Pre-Lab Calculations
 
-- `ISC01 = 1`
-- `ISC00 = 0`
+Complete these before writing any code.
 
-2. `EIMSK` has `INT0` enabled.
-3. Global interrupts enabled with `sei()`.
+### Overflow mode
 
-## Software Setup
+Target: toggle the red LED at 2 Hz (500 ms on, 500 ms off = 250 ms per toggle).
 
-1. Select environment `04_interrupt_buzzer`.
-2. Build and upload.
+Using no prescaler:
 
-## Part A - Interrupt Trigger Validation
+```text
+reload = 65536 - (f_clock x time) = 65536 - (20000000 x 0.250)
+reload = 65536 - 5000000
+```
 
-1. Leave button unpressed.
-2. Confirm buzzer state remains idle.
-3. Press button and release.
-4. Confirm buzzer follows input transitions through ISR logic.
+This exceeds the 16-bit range. Choose prescaler 256:
 
-Pass criteria:
+```text
+reload = 65536 - ((20000000 / 256) x 0.250)
+reload = 65536 - 19531
+reload = 45005
+```
 
-- Response is immediate and repeatable.
+Write your reload value here: ____________
 
-## Part B - Main Loop Independence
+### CTC mode
 
-1. Observe LEDs still running sequence.
-2. Press button at random times.
-3. Confirm ISR action occurs even during LED delays.
+Target: toggle the red LED at 2 Hz (250 ms per toggle).
 
-Pass criteria:
+Using prescaler 256:
 
-- Button response is noticeably better than Session 3 polling.
+```text
+OCR1A = ((f_clock / 256) x 0.250) - 1
+OCR1A = (78125 x 0.250) - 1
+OCR1A = 19531 - 1
+OCR1A = 19530
+```
 
-## Part C - Debounce Confirmation
+Write your compare value here: ____________
 
-1. Perform slow deliberate press.
-2. Perform rapid noisy half-press.
-3. Confirm no extra false triggers.
+---
 
-If false triggers occur:
+## Task 1 - Timer 1 in Overflow Mode
 
-1. Keep debounce delay near 20 ms.
-2. Recheck button contacts and wiring.
+Create a new project environment or use a scratch file. Enter the following programme, substituting your calculated reload value:
 
-## Fault Isolation
+```c
+#define F_CPU 20000000UL
+#include <avr/io.h>
+#include <avr/interrupt.h>
 
-If interrupt does not fire:
+#define RED_LED  PB0
+#define RELOAD   45005U
 
-1. Confirm PD2 wiring and pull-down.
-2. Confirm `ISR(INT0_vect)` signature exactly matches.
-3. Confirm `sei()` is called after setup.
-4. Confirm environment `04_interrupt_buzzer` is selected.
+int main(void)
+{
+    DDRB |= (1<<RED_LED);
+
+    TCNT1  = RELOAD;
+    TIMSK1 = (1<<TOIE1);
+    TCCR1B = (1<<CS12);         // Prescaler 256: CS12=1, CS11=0, CS10=0
+
+    sei();
+
+    while (1) { }
+}
+
+ISR(TIMER1_OVF_vect)
+{
+    TCNT1 = RELOAD;             // Reload must be first line in ISR
+    PORTB ^= (1<<RED_LED);
+}
+```
+
+Build and flash. Observe the red LED.
+
+Expected result: red LED toggles at a steady 250 ms interval (2 Hz blink).
+
+Pass criteria: blink rate is visually consistent over 30 seconds.
+
+---
+
+## Task 2 - Main Loop Independence
+
+Add a second LED pattern to the main loop that runs independently of the timer:
+
+```c
+while (1)
+{
+    PORTB ^= (1<<PB1);          // Yellow LED toggles in main loop
+    _delay_ms(1000);
+}
+```
+
+Build and observe both LEDs.
+
+Expected result: the red LED blinks at 250 ms driven by the timer interrupt, the yellow LED blinks at 1000 ms driven by `_delay_ms()` in the main loop. Both run simultaneously and independently.
+
+Pass criteria: removing the timer ISR stops the red LED but the yellow LED is unaffected.
+
+---
+
+## Task 3 - Timer 1 in CTC Mode
+
+Replace the overflow-mode programme with a CTC version using your calculated OCR1A value:
+
+```c
+#define F_CPU 20000000UL
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+#define RED_LED  PB0
+#define COMPARE  19530U
+
+int main(void)
+{
+    DDRB |= (1<<RED_LED);
+
+    OCR1A  = COMPARE;
+    TCCR1B = (1<<WGM12) | (1<<CS12);   // CTC mode, prescaler 256
+    TIMSK1 = (1<<OCIE1A);
+
+    sei();
+
+    while (1) { }
+}
+
+ISR(TIMER1_COMPA_vect)
+{
+    PORTB ^= (1<<RED_LED);      // No reload needed in CTC mode
+}
+```
+
+Build and flash. Confirm the blink rate matches the overflow mode version.
+
+Pass criteria: LED blinks at 2 Hz with no reload needed in the ISR.
+
+---
+
+## Task 4 - Adjusting the Target Frequency
+
+Calculate the OCR1A value for a 4 Hz blink (125 ms per toggle) with prescaler 256:
+
+```text
+OCR1A = ((20000000 / 256) x 0.125) - 1 = ____________
+```
+
+Edit the `COMPARE` define and rebuild. Observe the new blink rate.
+
+Pass criteria: LED blinks visibly faster than in Task 3.
+
+---
+
+## Task 5 - Longer Period
+
+Calculate the OCR1A value for a 0.5 Hz blink (1000 ms per toggle) with prescaler 1024:
+
+```text
+OCR1A = ((20000000 / 1024) x 1.000) - 1 = ____________
+```
+
+Update `TCCR1B` to select prescaler 1024 (CS12=1, CS10=1) and update `COMPARE`. Rebuild and observe.
+
+Pass criteria: LED blinks clearly slower than in Task 3.
+
+---
+
+## Quick Fault Isolation
+
+| Symptom                   | Likely cause                        | Fix                                         |
+| ------------------------- | ----------------------------------- | ------------------------------------------- |
+| LED never blinks          | TIMSK1 or sei() missing             | Check both lines are present                |
+| Blink rate wildly wrong   | Prescaler bits set incorrectly      | Cross-check CS12/CS11/CS10 against table    |
+| Overflow mode drifts      | TCNT1 reload missing from ISR       | Reload must be the first line in the ISR    |
+| CTC mode has no ISR fires | WGM12 not set in TCCR1B             | Confirm WGM12 bit is set alongside CS bits  |
+
+---
 
 ## Lab Record
 
 - Date:
-- Edge mode configured:
-- Debounce value:
-- Observed responsiveness vs Session 3:
-- Issues and fixes:
+- Calculated reload for overflow mode:
+- Calculated OCR1A for CTC mode:
+- Observed blink rates (Task 3, Task 4, Task 5):
+- Main loop observation (Task 2):
+- Issues found:
+- Fix applied:
