@@ -1,84 +1,146 @@
-# Session 3 Lab - Button Inputs with Polling
+# Session 3 Lab - Inputs, Bit Masking and Interrupts
 
-Hardware target: ATmega644P on Richard Reeves AVR PCB 2018.
-Input: PD2 button (INT0 pin used as GPIO input here).
-Output: PD3 active buzzer.
+Hardware: ATmega644P on Richard Reeves AVR PCB 2018.
+Programmer: Pololu USB AVR Programmer v2.1 on COM4.
+Clock: 20 MHz external crystal.
+
+---
 
 ## Lab Goal
 
-Read button state from `PIND` and control buzzer while LEDs continue pattern output.
+Read a digital input via polling and via an external interrupt, compare the two approaches and confirm that the interrupt responds even during a blocking delay in the main loop.
 
-## Wiring Verification
+---
 
-1. Button connected between VCC and PD2.
-2. 10k pull-down from PD2 to GND.
-3. Buzzer positive to PD3.
-4. Buzzer negative to GND.
+## Wiring Checks
 
-## Software Setup
+1. Button connected between VCC and PD2 (J6 pin 4) with 10kR pull-down to GND.
+2. Active buzzer positive terminal connected to PD3 (J6 pin 5).
+3. Buzzer negative terminal connected to GND rail.
+4. Confirm PD2 reads LOW with button open using a meter before powering the board.
 
-1. Open `platformio/` in VS Code.
-2. Select environment `03_button_polling`.
-3. Build and upload.
+---
 
-## Part A - Input Read Validation
+## Task 1 - Read Port D and Confirm Button State
 
-1. Do not press the button.
-2. Confirm buzzer is OFF.
-3. Press and hold the button.
-4. Confirm buzzer is ON continuously.
-5. Release the button.
-6. Confirm buzzer returns OFF.
+Select environment `03_button_polling` and open [platformio/src/03_button_polling.c](../../platformio/src/03_button_polling.c).
 
-Pass criteria:
+Trace through the code and answer:
 
-- Buzzer follows button state every time.
+1. Which DDR register configures PD2 as an input?
+2. Which register and which bit are read to detect the button?
+3. Why does the code use `PIND & (1<<BUTTON)` rather than just `PIND == 1`?
 
-## Part B - Independent Concurrent Behaviour
+Build and upload. Press and release the button several times.
 
-1. Observe LEDs cycling on PB0 to PB4.
-2. Press button during each LED state.
-3. Confirm buzzer behaviour does not stop LED cycle.
+Expected result: buzzer sounds while button is held, silences on release.
 
-Pass criteria:
+Pass criteria: buzzer follows button state reliably over 20 presses.
 
-- LED sequence continues while buzzer changes with button input.
+---
 
-## Part C - Polling Limitation Demonstration
+## Task 2 - Masking the Input
 
-1. Tap button very quickly during long `_delay_ms(500)` sections.
-2. Count missed taps over 20 attempts.
+Write a small test that only lights the red LED when the button is pressed, leaving all other LEDs unchanged:
 
-Expected learning:
+```c
+if (PIND & (1<<PD2))
+{
+    PORTB |= (1<<PB0);      // Red LED on
+}
+else
+{
+    PORTB &= ~(1<<PB0);     // Red LED off
+}
+```
 
-- Some brief taps may be missed due to polling plus blocking delays.
+Add this block inside the existing `while(1)` loop and rebuild.
 
-## Improvement Exercise
+Pass criteria: red LED follows button state; other LEDs are not disturbed.
 
-Reduce LED delay to `_delay_ms(150)` and repeat quick taps.
+---
 
-Pass criteria:
+## Task 3 - Polling Limitation
 
-- Missed taps reduce compared with 500 ms version.
+Reduce the LED cycle delay from 500ms to 150ms in `03_button_polling.c` and rebuild. Tap the button quickly several times.
+
+Observation questions:
+
+- Does the buzzer always respond on the first tap?
+- How does the response time compare to when you hold the button?
+
+Record your observations. The purpose of this task is to demonstrate the fundamental limitation of polling when the CPU is occupied with other work.
+
+---
+
+## Task 4 - External Interrupt on INT0
+
+Select environment `04_interrupt_buzzer` and open [platformio/src/04_interrupt_buzzer.c](../../platformio/src/04_interrupt_buzzer.c).
+
+Trace through the initialisation code line by line using the notes and the EICRA table:
+
+1. What does `EICRA |= (1<<ISC01)` set INT0 to respond to?
+2. What does `EIMSK |= (1<<INT0)` do?
+3. What does `sei()` do and why must it come after the peripheral configuration?
+
+Build and upload. Repeat the quick-tap test from Task 3.
+
+Expected result: buzzer responds to the button press immediately, even during the LED cycle delay.
+
+Pass criteria: buzzer response is perceptibly faster than in the polling version.
+
+---
+
+## Task 5 - Conditional Logic Based on Button State
+
+Extend the ISR to implement this behaviour:
+
+| Button action | Buzzer action |
+| ------------- | ------------- |
+| Pressed       | Toggle on     |
+| Released      | Toggle off    |
+
+In the ISR, read `PIND` after the debounce delay and use an `if/else` to drive the buzzer:
+
+```c
+ISR(INT0_vect)
+{
+    _delay_ms(20);
+
+    if (PIND & (1<<BUTTON))
+    {
+        PORTD |= (1<<BUZZER);
+    }
+    else
+    {
+        PORTD &= ~(1<<BUZZER);
+    }
+}
+```
+
+Change `EICRA` to trigger on any logic change (ISC01=0, ISC00=1) so the ISR fires on both press and release. Build and test.
+
+Pass criteria: buzzer tracks button state correctly with any-edge triggering.
+
+---
 
 ## Quick Fault Isolation
 
-If buzzer is always ON:
+| Symptom                        | Likely cause                    | Fix                                     |
+| ------------------------------ | ------------------------------- | --------------------------------------- |
+| Button has no effect at all    | EIMSK or sei() missing          | Check both are present after EICRA      |
+| Buzzer fires without pressing  | Pull-down missing or wrong edge | Confirm 10kR to GND and ISC01/ISC00     |
+| ISR fires multiple times       | Button bounce                   | Add 20ms debounce delay in ISR          |
+| Main loop LEDs freeze          | Long code in ISR                | Move processing to main loop via flag   |
 
-1. Check pull-down resistor to GND.
-2. Check button wiring is not shorted.
-3. Confirm conditional uses `if (PIND & (1<<BUTTON))`.
-
-If buzzer never turns ON:
-
-1. Check `DDRD |= (1<<PD3)`.
-2. Check buzzer polarity.
-3. Check PD2 line reaches HIGH when pressed.
+---
 
 ## Lab Record
 
 - Date:
-- Build environment:
-- Missed tap count at 500 ms:
-- Missed tap count at 150 ms:
-- Notes:
+- Tasks completed:
+- Polling response observations (Task 3):
+- Interrupt response observations (Task 4):
+- Edge mode used in Task 5:
+- Issues found:
+- Fix applied:
