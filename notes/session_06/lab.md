@@ -1,81 +1,224 @@
-# Session 6 Lab - Advanced State Machine Modes
+# Session 6 Lab - UART Serial Transmission
 
-Hardware target: ATmega644P with PB0 to PB4 LEDs, PD2 button and PD3 buzzer.
-Code target: nine-mode full build.
+Hardware: ATmega644P on Richard Reeves AVR PCB 2018.
+Programmer: Pololu USB AVR Programmer v2.1 on COM4.
+Clock: 20 MHz external crystal.
+UART: USART0, PD1 (TX), PD0 (RX), J7 Molex KK header.
+
+---
 
 ## Lab Goal
 
-Validate all advanced modes and ensure reliable transitions under load.
+Initialise USART0 and transmit characters, strings and formatted numbers to a PC terminal. Build a reusable `transmit_char` and `transmit_string` function pair that will be used in later sessions.
 
-## Software Setup
+---
 
-1. Select environment `06_state_machine`.
-2. Build and upload.
-3. Confirm startup animation executes once.
+## Pre-Lab: Identify the Serial COM Port
 
-## Mode Checklist
+1. Connect the Pololu programmer to USB.
+2. Open Device Manager and expand **Ports (COM and LPT)**.
+3. Note both COM ports that appear. The lower-numbered is the programming port (COM4). The higher-numbered is the UART serial port.
+4. Write the serial COM port number here: ____________
 
-0. Chase
-1. Blink All
-2. Alternate
-3. PWM Fade
-4. Knight Rider
-5. Binary Counter
-6. Random
-7. Reaction Game
-8. Tetris Melody
+---
 
-## Part A - Full Walkthrough Test
+## Task 1 - Initialise USART0
 
-1. Start in mode 0.
-2. Press button once to move to next mode.
-3. Record observed behaviour at each mode.
-4. Continue until mode 8.
-5. Press once more and confirm wrap back to mode 0.
+Create a new programme. Add the following initialisation:
 
-Pass criteria:
+```c
+#define F_CPU 20000000UL
+#include <avr/io.h>
+#include <util/delay.h>
 
-- Every mode is reachable.
-- Wraparound works correctly.
+void uart_init(void)
+{
+    UBRR0  = 129;           // 9600 baud at 20 MHz
+    UCSR0B = (1<<TXEN0);    // Enable transmitter
+}
 
-## Part B - Transition Stress Test
+int main(void)
+{
+    uart_init();
 
-1. Press button rapidly but cleanly through many transitions.
-2. Confirm no lockup and no stuck LED output.
-3. Confirm each transition gives expected clear state and beep.
+    while (1) { }
+}
+```
 
-Pass criteria:
+Build and check there are no errors or warnings. Open Atmel Studio's Data Visualizer (or any terminal at 9600 8-N-1 on the serial COM port) and connect before moving to Task 2.
 
-- System remains responsive for at least 30 transitions.
+---
 
-## Part C - Long-Run Stability
+## Task 2 - Transmit a Single Character
 
-1. Leave mode 4 running for 2 minutes.
-2. Leave mode 5 running for 2 minutes.
-3. Leave mode 6 running for 2 minutes.
-4. Confirm stable operation and no reset.
+Add the `transmit_char` function and send a single character every second:
 
-Pass criteria:
+```c
+void transmit_char(char c)
+{
+    while (!(UCSR0A & (1<<UDRE0)));
+    UDR0 = c;
+}
+```
 
-- Continuous operation remains stable.
+In `main`, change the while loop to:
 
-## Fault Isolation
+```c
+while (1)
+{
+    UDR0 = '1';
+    _delay_ms(1000);
+}
+```
 
-If a mode cannot be exited:
+Build, flash and observe the terminal.
 
-1. Check ISR still sets mode on button press.
-2. Check debounce is not too long.
-3. Confirm PD2 line transitions correctly.
+Expected result: the character `1` appears once per second.
 
-If random mode looks repetitive:
+Now change the transmitted character to `A`, then `Z`, then `9`. Rebuild each time.
 
-1. Recheck ADC read path.
-2. Confirm input source for noise is not hard-driven.
+Pass criteria: the correct character appears for each rebuild.
+
+---
+
+## Task 3 - Use transmit_char Instead of Direct UDR0 Write
+
+Replace the direct `UDR0 = '1'` line with `transmit_char('Q')` and remove the 1000ms delay. Rebuild and observe.
+
+Expected result: the terminal fills rapidly with `Q` characters because there is no delay — only the UDRE0 wait between each.
+
+Add a 500ms delay after the `transmit_char` call. Rebuild and confirm the rate drops to two characters per second.
+
+---
+
+## Task 4 - Transmit a String
+
+Add `transmit_string` and `strlen` support:
+
+```c
+#include <string.h>
+
+void transmit_string(char str[])
+{
+    uint8_t len = strlen(str);
+    for(uint8_t i = 0; i < len; i++)
+    {
+        transmit_char(str[i]);
+    }
+}
+```
+
+Change the while loop to:
+
+```c
+while (1)
+{
+    transmit_string("Hello\r\n");
+    _delay_ms(500);
+}
+```
+
+Build and observe the terminal.
+
+Expected result: `Hello` appears on a new line twice per second.
+
+Change the string to your name followed by `\r\n`. Rebuild and confirm.
+
+Pass criteria: the string appears at the correct rate with a line break after each instance.
+
+---
+
+## Task 5 - Dynamic String with sprintf
+
+Add `<stdio.h>` to the includes and declare a buffer and counter:
+
+```c
+#include <stdio.h>
+
+char uart_buffer[30];
+int count = 0;
+```
+
+Change the while loop to:
+
+```c
+while (1)
+{
+    sprintf(uart_buffer, "Count: %d\r\n", count);
+    transmit_string(uart_buffer);
+    count++;
+    if (count > 15) count = 0;
+    _delay_ms(500);
+}
+```
+
+Build and observe.
+
+Expected result: `Count: 0` through `Count: 15` appear in sequence, then restart.
+
+Now change the format string to `"Hex: 0x%02X\r\n"` and rebuild. The same values should now appear in two-digit uppercase hexadecimal.
+
+Pass criteria: values count from 0 to 15 in both decimal and hex formats.
+
+---
+
+## Task 6 - Timer-Triggered Transmission
+
+Replace the main loop delay with a Timer 1 CTC interrupt using the techniques from session 4. The while loop must be empty; all transmission happens in the ISR.
+
+Calculate OCR1A for a 500ms interval with prescaler 1024:
+
+```text
+OCR1A = ((20000000 / 1024) x 0.500) - 1 = ____________
+```
+
+Structure:
+
+```c
+#include <avr/interrupt.h>
+
+volatile int count = 0;
+
+ISR(TIMER1_COMPA_vect)
+{
+    sprintf(uart_buffer, "Count: %d\r\n", count);
+    transmit_string(uart_buffer);
+    count++;
+    if (count > 15) count = 0;
+}
+
+int main(void)
+{
+    uart_init();
+    // Timer 1 CTC init here
+    sei();
+
+    while (1) { }
+}
+```
+
+Build and confirm the output rate matches the timer interval.
+
+Pass criteria: count increments at exactly 500ms intervals regardless of the main loop.
+
+---
+
+## Quick Fault Isolation
+
+- **Nothing in terminal** — check the serial COM port number and baud rate (9600 8-N-1).
+- **Garbled characters** — baud rate mismatch. Confirm UBRR0 = 129 and terminal is set to 9600.
+- **First character always missing** — UDRE0 check missing. Confirm the while loop in `transmit_char`.
+- **sprintf produces nothing** — `<stdio.h>` not included or buffer too small.
+- **ISR not firing** — TIMSK1 or sei() missing. Check both are present.
+
+---
 
 ## Lab Record
 
 - Date:
-- Number of successful transitions:
-- Modes with issues:
-- Stability test notes:
-- Fixes applied:
+- Serial COM port used:
+- Tasks completed:
+- UBRR0 value used:
+- OCR1A calculated for Task 6:
+- Issues found:
+- Fix applied:
