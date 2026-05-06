@@ -43,8 +43,8 @@ When Timer 0 is configured for hardware PWM and the OC0A or OC0B output is enabl
 | -------- | --------------------------------------------------------- |
 | `TCCR0A` | Waveform generation and compare output mode               |
 | `TCCR0B` | Clock select and waveform generation (WGM02)              |
-| `OCR0A`  | Compare value A — sets duty cycle on OC0A (PB3)           |
-| `OCR0B`  | Compare value B — sets duty cycle on OC0B (PB4)           |
+| `OCR0A`  | Compare value A: sets duty cycle on OC0A (PB3)            |
+| `OCR0B`  | Compare value B: sets duty cycle on OC0B (PB4)            |
 | `TCNT0`  | 8-bit counter (runs automatically once timer is started)  |
 
 ---
@@ -75,9 +75,9 @@ f_PWM = 20000000 / (256 x 8) = 9765.6 Hz
 
 For fast PWM mode 3 with non-inverting output on both channels:
 
-- **WGM01, WGM00** — both set to 1 (fast PWM mode 3)
-- **COM0A1, COM0A0** — set to 1, 0 (non-inverting PWM on OC0A, pin PB3)
-- **COM0B1, COM0B0** — set to 1, 0 (non-inverting PWM on OC0B, pin PB4)
+- **WGM01, WGM00**: both set to 1 (fast PWM mode 3)
+- **COM0A1, COM0A0**: set to 1, 0 (non-inverting PWM on OC0A, pin PB3)
+- **COM0B1, COM0B0**: set to 1, 0 (non-inverting PWM on OC0B, pin PB4)
 
 ### TCCR0B bit settings for clock select
 
@@ -102,13 +102,13 @@ Drive the blue LED (PB4 = OC0B) at 50% duty cycle:
 
 int main(void)
 {
-    DDRB |= (1<<PB4);                           // OC0B as output
+    DDRB |= (1<<PB4);                                       // PB4 (OC0B) must be an output; hardware PWM only appears on pin if DDR bit is set
 
-    OCR0B  = 127;                               // 50% of 255
-    TCCR0A = (1<<COM0B1) | (1<<WGM01) | (1<<WGM00);  // Non-inv PWM, fast mode
-    TCCR0B = (1<<CS00);                         // No prescaler
+    OCR0B  = 127;                                           // Compare value 127 / 255 gives approx 50% duty cycle on OC0B
+    TCCR0A = (1<<COM0B1) | (1<<WGM01) | (1<<WGM00);        // COM0B1: non-inverting PWM on OC0B; WGM01+WGM00: fast PWM mode 3
+    TCCR0B = (1<<CS00);                                     // CS00=1: no prescaler, timer clock = F_CPU; this starts the timer
 
-    while (1) { }                               // Timer runs in hardware
+    while (1) { }                                           // PWM waveform runs entirely in hardware; CPU does not need to act
 }
 ```
 
@@ -127,19 +127,19 @@ Drive both the green LED (PB3 = OC0A) and the blue LED (PB4 = OC0B) at different
 
 int main(void)
 {
-    DDRB |= (1<<PB3) | (1<<PB4);
+    DDRB |= (1<<PB3) | (1<<PB4);                               // PB3 (OC0A, green) and PB4 (OC0B, blue) both as outputs
 
-    TCCR0A = (1<<COM0A1) | (1<<COM0B1) | (1<<WGM01) | (1<<WGM00);
-    TCCR0B = (1<<CS00);
+    TCCR0A = (1<<COM0A1) | (1<<COM0B1) | (1<<WGM01) | (1<<WGM00); // Non-inverting PWM on OC0A and OC0B; fast PWM mode 3
+    TCCR0B = (1<<CS00);                                         // No prescaler; timer starts running immediately
 
     while (1)
     {
         // Fade green LED from dim to bright in steps
         for(uint8_t brightness = 0; brightness < 255; brightness++)
         {
-            OCR0A = brightness;             // Green LED duty cycle
-            OCR0B = 255 - brightness;       // Blue LED duty cycle (inverse)
-            _delay_ms(5);
+            OCR0A = brightness;             // Green LED duty cycle: 0 (off) to 254 (near full brightness)
+            OCR0B = 255 - brightness;       // Blue LED duty cycle: inverse of green (full when green is off)
+            _delay_ms(5);                   // 5 ms per step; full cycle takes 255 x 5 ms = 1.275 s
         }
     }
 }
@@ -154,7 +154,7 @@ Both channels share the same timer, so they have the same frequency but independ
 The projects already built use software PWM, which toggles a pin manually in a tight loop:
 
 ```c
-// Software PWM — blocks the CPU
+// Software PWM - blocks the CPU
 for(uint8_t duty = 0; duty < 255; duty++)
 {
     PORTB = ALL_LEDS;

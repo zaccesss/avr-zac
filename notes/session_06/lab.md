@@ -22,6 +22,23 @@ Initialise USART0 and transmit characters, strings and formatted numbers to a PC
 
 ---
 
+## Breadboard Setup
+
+This session uses UART transmission only. No LEDs or other breadboard components are needed.
+
+**Components required:**
+- 4-wire connection from J7 (Molex KK UART header) to the Pololu USB AVR Programmer v2.1 UART port
+
+**Connections (J7 Molex KK header to Pololu programmer UART port):**
+- Black wire (GND): J7 GND → Pololu programmer GND
+- Orange wire: J7 PD0 (RXD into AVR) → Pololu programmer UART TX output
+- Yellow wire: J7 PD1 (TXD from AVR) → Pololu programmer UART RX input
+- Red wire (VCC): J7 VCC → Pololu programmer VCC
+
+No LEDs, no potentiometer and no other breadboard components are required for this session.
+
+---
+
 ## Task 1 - Initialise USART0
 
 Create a new programme. Add the following initialisation:
@@ -85,7 +102,7 @@ Pass criteria: the correct character appears for each rebuild.
 
 Replace the direct `UDR0 = '1'` line with `transmit_char('Q')` and remove the 1000ms delay. Rebuild and observe.
 
-Expected result: the terminal fills rapidly with `Q` characters because there is no delay — only the UDRE0 wait between each.
+Expected result: the terminal fills rapidly with `Q` characters because there is no delay; only the UDRE0 wait between each.
 
 Add a 500ms delay after the `transmit_char` call. Rebuild and confirm the rate drops to two characters per second.
 
@@ -205,11 +222,11 @@ Pass criteria: count increments at exactly 500ms intervals regardless of the mai
 
 ## Quick Fault Isolation
 
-- **Nothing in terminal** — check the serial COM port number and baud rate (9600 8-N-1).
-- **Garbled characters** — baud rate mismatch. Confirm UBRR0 = 129 and terminal is set to 9600.
-- **First character always missing** — UDRE0 check missing. Confirm the while loop in `transmit_char`.
-- **sprintf produces nothing** — `<stdio.h>` not included or buffer too small.
-- **ISR not firing** — TIMSK1 or sei() missing. Check both are present.
+- **Nothing in terminal**: check the serial COM port number and baud rate (9600 8-N-1).
+- **Garbled characters**: baud rate mismatch. Confirm UBRR0 = 129 and terminal is set to 9600.
+- **First character always missing**: UDRE0 check missing. Confirm the while loop in `transmit_char`.
+- **sprintf produces nothing**: `<stdio.h>` not included or buffer too small.
+- **ISR not firing**: TIMSK1 or sei() missing. Check both are present.
 
 ---
 

@@ -76,13 +76,13 @@ reload = 65536 - (20000000 × 0.000250) = 65536 - 5000 = 60536
 
 int main(void)
 {
-    DDRB |= (1<<RED_LED);
+    DDRB |= (1<<RED_LED);       // Set the red LED pin as an output
 
     TCNT1  = RELOAD;            // Load initial reload value
     TIMSK1 = (1<<TOIE1);        // Enable Timer 1 overflow interrupt
     TCCR1B = (1<<CS10);         // Start timer, no prescaler
 
-    sei();
+    sei();                      // Enable global interrupts so the timer ISR can fire
 
     while (1) { }               // CPU free to do other work
 }
@@ -170,15 +170,15 @@ Check: 39061 < 65535, so prescaler 256 works. (With prescaler 64 the result woul
 
 int main(void)
 {
-    DDRB |= (1<<RED_LED);
+    DDRB |= (1<<RED_LED);       // Set the red LED pin as an output
 
     OCR1A  = COMPARE;           // Set the compare target
     TCCR1B = (1<<WGM12) | (1<<CS10);   // CTC mode, no prescaler
     TIMSK1 = (1<<OCIE1A);       // Enable compare A interrupt
 
-    sei();
+    sei();                      // Enable global interrupts so the timer ISR can fire
 
-    while (1) { }
+    while (1) { }               // CPU is free; the timer ISR handles LED toggling
 }
 
 ISR(TIMER1_COMPA_vect)

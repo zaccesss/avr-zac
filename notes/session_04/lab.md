@@ -12,6 +12,26 @@ Use Timer 1 to generate precise timed events without blocking the CPU, first in 
 
 ---
 
+## Breadboard Setup
+
+This session uses two LEDs wired to PORTB via header J4 on the PCB. Only PB0 and PB1 need to be connected for the timer tasks.
+
+**Header J4 (PORTB, 10-way):**
+- Pin 1: VCC rail supply
+- Pin 2: PB0 - Red LED via 220R resistor
+- Pin 3: PB1 - Yellow LED via 220R resistor
+- Pin 10: GND rail supply
+
+**LED wiring (same for each LED):**
+- Anode (long leg) connects via a 220R resistor to the header pin
+- Cathode (short leg) connects directly to the GND rail
+
+**Rails:**
+- VCC rail: wire from J4 pin 1 to the positive rail on the breadboard
+- GND rail: wire from J4 pin 10 to the negative rail on the breadboard
+
+---
+
 ## Pre-Lab Calculations
 
 Complete these before writing any code.
@@ -68,21 +88,21 @@ Create a new project environment or use a scratch file. Enter the following prog
 
 int main(void)
 {
-    DDRB |= (1<<RED_LED);
+    DDRB |= (1<<RED_LED);       // Set the red LED pin as an output
 
-    TCNT1  = RELOAD;
-    TIMSK1 = (1<<TOIE1);
+    TCNT1  = RELOAD;            // Preload the counter so it overflows after 250 ms
+    TIMSK1 = (1<<TOIE1);        // Enable Timer 1 overflow interrupt
     TCCR1B = (1<<CS12);         // Prescaler 256: CS12=1, CS11=0, CS10=0
 
-    sei();
+    sei();                      // Enable global interrupts so the timer ISR can fire
 
-    while (1) { }
+    while (1) { }               // CPU is free; timer handles LED toggling
 }
 
 ISR(TIMER1_OVF_vect)
 {
     TCNT1 = RELOAD;             // Reload must be first line in ISR
-    PORTB ^= (1<<RED_LED);
+    PORTB ^= (1<<RED_LED);      // Toggle the red LED on each overflow
 }
 ```
 
@@ -102,7 +122,7 @@ Add a second LED pattern to the main loop that runs independently of the timer:
 while (1)
 {
     PORTB ^= (1<<PB1);          // Yellow LED toggles in main loop
-    _delay_ms(1000);
+    _delay_ms(1000);            // 1 second blocking delay
 }
 ```
 
@@ -128,15 +148,15 @@ Replace the overflow-mode programme with a CTC version using your calculated OCR
 
 int main(void)
 {
-    DDRB |= (1<<RED_LED);
+    DDRB |= (1<<RED_LED);       // Set the red LED pin as an output
 
-    OCR1A  = COMPARE;
+    OCR1A  = COMPARE;           // Set the compare target value for CTC mode
     TCCR1B = (1<<WGM12) | (1<<CS12);   // CTC mode, prescaler 256
-    TIMSK1 = (1<<OCIE1A);
+    TIMSK1 = (1<<OCIE1A);       // Enable Timer 1 compare A interrupt
 
-    sei();
+    sei();                      // Enable global interrupts so the timer ISR can fire
 
-    while (1) { }
+    while (1) { }               // CPU is free; timer ISR handles LED toggling
 }
 
 ISR(TIMER1_COMPA_vect)

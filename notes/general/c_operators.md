@@ -48,10 +48,10 @@
 ### GPIO use summary
 
 ```c
-PORTB |= (1<<PB0);      // Set bit — turn on LED
-PORTB &= ~(1<<PB0);     // Clear bit — turn off LED
-PORTB ^= (1<<PB0);      // Toggle bit — flip LED state
-if (PIND & (1<<PD2))    // Test bit — check button state
+PORTB |= (1<<PB0);      // Set bit - turn on LED
+PORTB &= ~(1<<PB0);     // Clear bit - turn off LED
+PORTB ^= (1<<PB0);      // Toggle bit - flip LED state
+if (PIND & (1<<PD2))    // Test bit - check button state
 ```
 
 ---
@@ -129,8 +129,8 @@ When more than one operator appears in a statement they are evaluated from the t
 When using bitwise operators with bit-shift expressions, always group the shift first:
 
 ```c
-PORTB &= ~(1<<PB0);      // Correct — shift happens before NOT
-PORTB &= ~1<<PB0;        // Wrong  — NOT applies to 1 first, then shifts
+PORTB &= ~(1<<PB0);      // Correct - shift happens before NOT
+PORTB &= ~1<<PB0;        // Wrong  - NOT applies to 1 first, then shifts
 ```
 
 The second line incorrectly inverts 1 to get 0b11111110, then shifts left, masking the wrong bits.

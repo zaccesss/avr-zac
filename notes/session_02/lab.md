@@ -12,6 +12,29 @@ Build confidence with bit manipulation, arrays and loops by writing LED control 
 
 ---
 
+## Breadboard Setup
+
+This session uses five LEDs wired to PORTB via header J4 on the PCB.
+
+**Header J4 (PORTB, 10-way):**
+- Pin 1: VCC rail supply
+- Pin 2: PB0 - Red LED via 220R resistor
+- Pin 3: PB1 - Yellow LED via 220R resistor
+- Pin 4: PB2 - White LED via 220R resistor
+- Pin 5: PB3 - Green LED via 220R resistor
+- Pin 6: PB4 - Blue LED via 220R resistor
+- Pin 10: GND rail supply
+
+**LED wiring (same for each LED):**
+- Anode (long leg) connects via a 220R resistor to the header pin
+- Cathode (short leg) connects directly to the GND rail
+
+**Rails:**
+- VCC rail: wire from J4 pin 1 to the positive rail on the breadboard
+- GND rail: wire from J4 pin 10 to the negative rail on the breadboard
+
+---
+
 ## Pre-Lab Checks
 
 1. Power off before rewiring anything.
@@ -43,7 +66,7 @@ These binary patterns will be used in Task 3.
 
 ## Task 2 - Single LED Blink with Bit Masks
 
-File: [platformio/src/01_blink.c](../../platformio/src/01_blink.c)
+File: [projects/learning_projects/01_blink/01_blink.c](../../projects/learning_projects/01_blink/01_blink.c)
 
 1. Select environment `01_blink` in the VS Code status bar.
 2. Open the source file and confirm PB0 is set as output using `DDRB |= (1<<PB0)`.

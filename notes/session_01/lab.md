@@ -12,6 +12,29 @@ Verify the toolchain, programmer and hardware are all working correctly by build
 
 ---
 
+## Breadboard Setup
+
+This session uses five LEDs wired to PORTB via header J4 on the PCB.
+
+**Header J4 (PORTB, 10-way):**
+- Pin 1: VCC rail supply
+- Pin 2: PB0 - Red LED via 220R resistor
+- Pin 3: PB1 - Yellow LED via 220R resistor
+- Pin 4: PB2 - White LED via 220R resistor
+- Pin 5: PB3 - Green LED via 220R resistor
+- Pin 6: PB4 - Blue LED via 220R resistor
+- Pin 10: GND rail supply
+
+**LED wiring (same for each LED):**
+- Anode (long leg) connects via a 220R resistor to the header pin
+- Cathode (short leg) connects directly to the GND rail
+
+**Rails:**
+- VCC rail: wire from J4 pin 1 to the positive rail on the breadboard
+- GND rail: wire from J4 pin 10 to the negative rail on the breadboard
+
+---
+
 ## Safety Checks Before Starting
 
 1. Power off before wiring anything.
@@ -42,6 +65,8 @@ Pass criteria: both COM ports appear without error symbols.
 3. Run **Terminal** then **Run Task** then **Build and Upload**.
 4. Observe the terminal output.
 
+The source file for this environment is at `projects/learning_projects/01_blink/01_blink.c`.
+
 Expected output (final lines):
 
 ```text
@@ -55,7 +80,7 @@ Pass criteria: build completes with no errors and the red LED on PB0 blinks at a
 
 ## Task 3 - Read the Programme and Explain Each Line
 
-Open [projects/01_blink/01_blink.c](../../projects/01_blink/01_blink.c) and answer the following for each line in main():
+Open [projects/learning_projects/01_blink/01_blink.c](../../projects/learning_projects/01_blink/01_blink.c) and answer the following for each line in main():
 
 | Line                              | What it does |
 | --------------------------------- | ------------ |
@@ -70,7 +95,7 @@ Open [projects/01_blink/01_blink.c](../../projects/01_blink/01_blink.c) and answ
 
 ## Task 4 - Modify the Blink Timing
 
-1. Open `platformio/src/01_blink.c`.
+1. Open `projects/learning_projects/01_blink/01_blink.c`.
 2. Change the ON delay to 500ms and the OFF delay to 100ms.
 3. Build and upload.
 4. Observe the LED.
@@ -86,6 +111,8 @@ Pass criteria: the visible asymmetric blink matches your delay values.
 1. Select environment `02_led_cycle` from the status bar.
 2. Build and upload.
 3. Observe the LEDs on PB0 to PB4.
+
+The source file for this environment is at `projects/learning_projects/02_led_cycle/02_led_cycle.c`.
 
 Expected result: one LED lights at a time and the sequence moves from red to yellow to white to green to blue, then repeats.
 

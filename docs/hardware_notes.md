@@ -97,18 +97,7 @@ the external reference voltage to J2.
 
 ## UART0
 
-UART0 is available on J7, a 4-way Molex KK header. The FTDI lead (TTL-232RG-VIP-WE) is
-used for serial communication. Only four of the six lead wires are needed:
-
-| Wire colour | Signal | Direction |
-|-------------|--------|-----------|
-| Black | GND (0V) | Common ground |
-| Orange | RXD | Lead output to AVR; AVR receives on PD0 |
-| Yellow | TXD | AVR output to lead; AVR transmits on PD1 |
-| Red | VCC | Power from PCB to FTDI lead |
-
-The brown and green wires (flow control) are not used and can be trimmed. Solder the header
-with the plastic back facing towards J6.
+UART0 is available on J7, a 4-way Molex KK header. The Pololu USB AVR Programmer v2.1 includes a built-in USB-to-UART bridge which creates a second COM port. Wire J7 to the Pololu programmer using the four-wire lead: Black=GND, Orange=RXD (into AVR), Yellow=TXD (from AVR), Red=VCC.
 
 ---
 
