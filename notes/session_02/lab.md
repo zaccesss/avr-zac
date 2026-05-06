@@ -1,108 +1,166 @@
-# Session 2 Lab - GPIO Outputs and LED Control
+# Session 2 Lab - Bit Shifting, Arrays and Data Types
 
-Hardware target: ATmega644P on Richard Reeves AVR PCB 2018.
+Hardware: ATmega644P on Richard Reeves AVR PCB 2018.
 Programmer: Pololu USB AVR Programmer v2.1 on COM4.
 Clock: 20 MHz external crystal.
 
+---
+
 ## Lab Goal
 
-Configure PORTB outputs and verify deterministic LED patterns on PB0 to PB4.
+Build confidence with bit manipulation, arrays and loops by writing LED control patterns that use only safe bit-mask operations and no raw register overwrites.
 
-## Safety and Pre-Lab Checks
+---
 
-1. Power off before rewiring.
-2. Confirm LED resistors are 220R.
+## Pre-Lab Checks
+
+1. Power off before rewiring anything.
+2. Confirm all five LED resistors are 220R and connected to J4 pins 2 to 6.
 3. Confirm common GND between PCB and breadboard.
-4. Confirm VCC is 5V with JP2 open.
-5. Confirm LEDs are on J4 pins:
+4. Confirm JP2 is not fitted (5V).
 
-- PB0 red
-- PB1 yellow
-- PB2 white
-- PB3 green
-- PB4 blue
+---
 
-## Software Setup
+## Task 1 - Seven-Segment Bit Mapping (Theory)
 
-1. Open the `platformio/` folder in VS Code.
-2. Select environment `01_blink` from the status bar.
-3. Run task `Build and Upload`.
-4. Confirm flash succeeds with stk500v2 and COM4.
+A seven-segment display has segments labelled A to G. To display the digit 1, segments B and C are lit. To display 7, segments A, B and C are lit.
 
-## Part A - Single LED Timing Check
+Although this setup uses individual LEDs rather than a seven-segment display, the same principle applies: each output is controlled by one bit in a port register.
 
-File: `platformio/src/01_blink.c`
+Complete the table for the five LEDs by writing a 1 when the LED should be on:
 
-Steps:
+| Number | Blue PB4 | Green PB3 | White PB2 | Yellow PB1 | Red PB0 | PORTB value |
+| ------ | -------- | --------- | --------- | ---------- | ------- | ----------- |
+| 0      | 0        | 0         | 0         | 0          | 0       | 0x00        |
+| 1      | 0        | 0         | 0         | 0          | 1       | 0x01        |
+| 2      |          |           |           |            |         |             |
+| 3      |          |           |           |            |         |             |
+| 4      |          |           |           |            |         |             |
 
-1. Verify PB0 is configured as output via DDRB.
-2. Set ON and OFF delays to known values, for example 1000 ms and 1000 ms.
-3. Build and upload.
-4. Observe red LED on PB0.
+These binary patterns will be used in Task 3.
 
-Expected result:
+---
 
-- LED toggles at stable 1 second ON and 1 second OFF rhythm.
-- No other LEDs flicker.
+## Task 2 - Single LED Blink with Bit Masks
 
-Pass criteria:
+File: [platformio/src/01_blink.c](../../platformio/src/01_blink.c)
 
-- Timing is visually stable for 30 seconds.
-- Reflash works on first attempt.
+1. Select environment `01_blink` in the VS Code status bar.
+2. Open the source file and confirm PB0 is set as output using `DDRB |= (1<<PB0)`.
+3. Confirm the LED is toggled with `|=` and `&= ~()`, not with direct PORTB assignment.
+4. Build and upload.
 
-## Part B - Five LED Cycle
+Expected result: the red LED blinks at a steady rate.
 
-1. Select environment `02_led_cycle`.
-2. Build and upload.
-3. Observe sequence red, yellow, white, green, blue.
-4. Confirm each LED is active for about 500 ms.
+Now change the ON delay to 200ms and the OFF delay to 800ms. Build and upload.
 
-Expected result:
+Expected result: the LED is on for noticeably less time than it is off.
 
-- Exactly one LED is on at a time.
-- Sequence restarts cleanly after blue.
+Pass criteria: both delay values visible by inspection, no compiler warnings.
 
-Pass criteria:
+---
 
-- Correct colour order matches wiring table.
-- No skipped states over 10 cycles.
+## Task 3 - LED Pattern Array
 
-## Part C - Timing Variation Exercise
+Create a new file based on `02_led_cycle.c`. Replace the explicit sequential assignments with an array of patterns and a `for` loop:
 
-1. Edit delay values to 200 ms.
-2. Build and upload.
-3. Observe faster cycle.
-4. Change to 800 ms.
-5. Build and upload again.
+```c
+uint8_t patterns[5] = {
+    (1<<PB0),
+    (1<<PB1),
+    (1<<PB2),
+    (1<<PB3),
+    (1<<PB4)
+};
 
-Expected result:
+for(int8_t i = 0; i < 5; i++)
+{
+    PORTB = patterns[i];
+    _delay_ms(300);
+}
+PORTB = 0x00;
+_delay_ms(300);
+```
 
-- Sequence speed changes proportionally.
+Build and test. Confirm the sequence matches the pattern array order.
 
-Pass criteria:
+Now add a sixth pattern to the array that lights the red and blue LEDs simultaneously:
 
-- Both modified timings run as expected.
+```c
+(1<<PB0) | (1<<PB4)
+```
+
+Update the loop limit to 6 and build again.
+
+Pass criteria: six distinct states cycle correctly, including the combined pattern.
+
+---
+
+## Task 4 - Counting Patterns with a for Loop
+
+Write a loop that counts from 0 to 31 in binary on the five LEDs:
+
+```c
+for(uint8_t count = 0; count < 32; count++)
+{
+    PORTB = count & 0x1F;   // Mask to lower five bits only
+    _delay_ms(200);
+}
+```
+
+The mask `0x1F` (binary `00011111`) ensures only PB0 to PB4 are affected even though `count` is 8 bits wide.
+
+Pass criteria: LEDs count from 0 (all off) to 31 (all on) in binary, then restart.
+
+---
+
+## Task 5 - Adjusting the Range
+
+Alter the loop from Task 4 to count from 3 to 8 only:
+
+1. Change the initialiser to `count = 3`.
+2. Change the condition to `count <= 8`.
+3. Build and observe.
+
+Make a note of what visible pattern you see and why the sequence looks the way it does.
+
+---
+
+## Task 6 - Counting Down
+
+Alter the loop to count down from 31 to 0:
+
+```c
+for(int8_t count = 31; count >= 0; count--)
+{
+    PORTB = count & 0x1F;
+    _delay_ms(200);
+}
+```
+
+Note why `int8_t` is used instead of `uint8_t` for a loop that decrements to 0.
+
+Pass criteria: LEDs count from 31 down to 0 then restart.
+
+---
 
 ## Quick Fault Isolation
 
-If one LED never turns on:
+| Symptom                  | Likely cause                           | Fix                                  |
+| ------------------------ | -------------------------------------- | ------------------------------------ |
+| All LEDs wrong pattern   | Array index out of range               | Check loop limit matches array size  |
+| Bits leak into wrong pin | Missing parentheses around mask        | Add parentheses before the tilde     |
+| Loop runs once only      | Wrong condition or wrong variable type | Check condition and use int8_t       |
+| Wrong LED responds       | Pin map error                          | Cross-check entry against wiring     |
 
-1. Check resistor seating and LED polarity.
-2. Check jumper wire to correct J4 pin.
-3. Check `DDRB` mask includes the pin bit.
-4. Check code is running `02_led_cycle` environment not another one.
-
-If upload times out:
-
-1. Confirm COM4 is correct.
-2. Confirm upload uses `-B 10`.
-3. Reconnect programmer and retry.
+---
 
 ## Lab Record
 
 - Date:
-- Environment tested:
+- Tasks completed:
+- Pattern array contents used:
 - Timing values tested:
-- Result summary:
+- Notes on counting up vs. counting down:
 - Issues found:
 - Fix applied:
