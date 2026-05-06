@@ -1,80 +1,205 @@
-# Session 7 Lab - ADC Noise, Random Patterns and Reaction Timing
+# Session 7 Lab - Analogue to Digital Conversion
 
-Hardware target: ATmega644P, floating or noise-prone ADC source for pseudo-random seed.
-Code target: random mode and reaction mode in full state machine build.
+Hardware: ATmega644P on Richard Reeves AVR PCB 2018.
+Programmer: Pololu USB AVR Programmer v2.1 on COM4.
+Clock: 20 MHz external crystal.
+ADC inputs: PORTA (J3), AVCC reference via JP1.
+
+---
 
 ## Lab Goal
 
-Test pseudo-random LED output quality and reaction mode correctness using ISR flag logic.
+Initialise the ADC, perform single-shot conversions and use the result to control LEDs and transmit readings via UART. Combine the ADC with the timer interrupt from session 4 and the UART from session 6.
 
-## Software Setup
+---
 
-1. Select environment `06_state_machine`.
-2. Build and upload.
-3. Step to mode 6 for random test, then mode 7 for reaction test.
+## Wiring for This Lab
 
-## Part A - Random Mode Distribution Check
+Connect a potentiometer to J3:
 
-1. Enter mode 6.
-2. Observe 50 consecutive pattern updates.
-3. Tally how often each LED appears ON.
+- Outer leg 1 to VCC (J3 pin 1)
+- Outer leg 2 to GND (J3 pin 10)
+- Wiper to PA0 (J3 pin 2, ADC0)
 
-Simple table to fill:
+If no potentiometer is available, leave PA0 unconnected to use ADC noise as a floating signal. The reading will not be stable but the code will still function.
 
-| LED | Count ON in 50 updates |
-| --- | ---------------------- |
-| PB0 |                        |
-| PB1 |                        |
-| PB2 |                        |
-| PB3 |                        |
-| PB4 |                        |
+Confirm JP1 is fitted before powering up.
 
-Pass criteria:
+---
 
-- No LED is permanently ON or permanently OFF.
-- Pattern appears varied to the eye.
+## Pre-Lab: Resolution Calculation
 
-## Part B - Reaction Mode Correctness
+At 5V with a 10-bit ADC:
 
-1. Enter mode 7.
-2. Press only when green LED appears.
-3. Confirm success feedback.
-4. Repeat and intentionally press on wrong colour.
-5. Confirm failure feedback.
+```text
+resolution = 5.000 / 1024 = ____________ mV per step
+```
 
-Pass criteria:
+Write the answer here: ____________
 
-- Success path and failure path are clearly distinct.
-- One press triggers one evaluation.
+---
 
-## Part C - Timing Sensitivity Exercise
+## Task 1 - Initialise the ADC and Read ADC0
 
-1. Perform 10 attempts aiming for green only.
-2. Record success count.
-3. Repeat with quicker reaction approach.
-4. Compare counts.
+Write the `adc_init` and `adc_read` functions:
 
-Pass criteria:
+```c
+#define F_CPU 20000000UL
+#include <avr/io.h>
+#include <util/delay.h>
 
-- Game outcome correlates with press timing.
+void adc_init(void)
+{
+    ADMUX  = (1<<REFS0);                                            // AVCC ref, ADC0
+    ADCSRA = (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);    // Enable, /128
+    DIDR0  = 0xFF;
+}
 
-## Fault Isolation
+uint16_t adc_read(void)
+{
+    ADCSRA |= (1<<ADSC);
+    while (ADCSRA & (1<<ADSC));
+    return ADC;
+}
 
-If button presses are ignored in reaction mode:
+int main(void)
+{
+    DDRB |= 0x1F;
+    adc_init();
 
-1. Confirm ISR sets `button_pressed` flag.
-2. Confirm reaction loop checks and clears flag.
-3. Confirm PD2 input state is valid.
+    while (1)
+    {
+        uint16_t val = adc_read();
+        PORTB = (val >> 7) & 0x1F;     // Map top 3 bits to 5 LEDs roughly
+        _delay_ms(100);
+    }
+}
+```
 
-If random patterns are fixed:
+Build and flash. Adjust the potentiometer and observe the LEDs.
 
-1. Confirm ADC conversion starts and completes.
-2. Confirm returned value is masked and written to PORTB.
+Expected result: more LEDs light as the potentiometer moves toward VCC.
+
+Pass criteria: LEDs respond smoothly to the full potentiometer range.
+
+---
+
+## Task 2 - LED Threshold Control
+
+Replace the LED mapping with threshold comparisons matching the ADC ranges:
+
+```c
+uint16_t val = adc_read();
+
+if (val < 256)
+    PORTB = 0x00;
+else if (val < 512)
+    PORTB = (1<<PB0);
+else if (val < 768)
+    PORTB = (1<<PB0) | (1<<PB3);
+else
+    PORTB = 0x1F;
+```
+
+Build and test with the potentiometer.
+
+Pass criteria: four distinct LED states visible across the full potentiometer range.
+
+---
+
+## Task 3 - Transmit ADC Readings via UART
+
+Add the UART functions from session 6 and transmit the ADC result as a formatted string:
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+char uart_buffer[30];
+
+// uart_init, transmit_char and transmit_string functions here
+```
+
+In the while loop:
+
+```c
+uint16_t val = adc_read();
+sprintf(uart_buffer, "ADC0: %u\r\n", val);
+transmit_string(uart_buffer);
+_delay_ms(200);
+```
+
+Build, connect the terminal at 9600 8-N-1 on the serial COM port and observe.
+
+Expected result: ADC readings appear in the terminal, updating five times per second.
+
+Alter the format string to also display the voltage:
+
+```c
+sprintf(uart_buffer, "ADC0: %u  (%.3fV)\r\n", val, val * 5.0 / 1023.0);
+```
+
+Pass criteria: both raw count and voltage appear correctly as the potentiometer moves.
+
+---
+
+## Task 4 - Timer-Triggered ADC Transmission
+
+Combine all three sessions: ADC, UART and Timer 1 CTC interrupt. The main loop must be empty.
+
+Structure:
+
+```c
+#include <avr/interrupt.h>
+
+volatile uint16_t adc_result = 0;
+
+ISR(TIMER1_COMPA_vect)
+{
+    adc_result = adc_read();
+    sprintf(uart_buffer, "ADC: %u\r\n", adc_result);
+    transmit_string(uart_buffer);
+}
+
+int main(void)
+{
+    DDRB |= 0x1F;
+    uart_init();
+    adc_init();
+
+    OCR1A  = 19530;                             // 250 ms at 20 MHz, /256
+    TCCR1B = (1<<WGM12) | (1<<CS12);
+    TIMSK1 = (1<<OCIE1A);
+
+    sei();
+    while (1) { }
+}
+```
+
+The while loop in main stays empty. All ADC reads and UART transmits occur in the ISR at the timer rate.
+
+Pass criteria: readings appear in terminal at 250ms intervals with no delays in main.
+
+---
+
+## Quick Fault Isolation
+
+- **ADC always returns 0** — ADEN not set in ADCSRA, or REFS0 not set in ADMUX.
+- **ADC always returns 1023** — PA0 floating to VCC; confirm potentiometer wiring.
+- **No UART output** — check TXEN0 and UBRR0 as in session 6.
+- **ISR never fires** — TIMSK1 or sei() missing; confirm both present.
+- **Readings jump randomly** — DIDR0 not set; enable it to reduce digital input noise.
+
+---
 
 ## Lab Record
 
 - Date:
-- Random mode observations:
-- Reaction attempts:
-- Success count:
-- Faults and fixes:
+- Resolution calculated:
+- ADC channel used:
+- Potentiometer connected (yes / no):
+- Tasks completed:
+- Voltage formula verified (Task 3):
+- Timer interval used in Task 4:
+- Issues found:
+- Fix applied:
