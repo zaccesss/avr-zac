@@ -37,7 +37,7 @@ uint8_t y = PIND & (1<<PD2);
 
 If PD2 is 0, `y` is 0 (false). If PD2 is 1, `y` is non-zero (true).
 
-In C, zero is false and any non-zero value is true. The numerical value of `y` does not matter in a conditional — only whether it is zero or not.
+In C, zero is false and any non-zero value is true. The numerical value of `y` does not matter in a conditional; only whether it is zero or not.
 
 ### Inverting a reading with NOT
 
@@ -267,7 +267,7 @@ ISR(INT0_vect)
 
 ## Debounce
 
-Mechanical buttons bounce — the contacts make and break rapidly for a few milliseconds after a press before settling. This can generate multiple interrupt edges from a single physical press.
+Mechanical buttons bounce; the contacts make and break rapidly for a few milliseconds after a press before settling. This can generate multiple interrupt edges from a single physical press.
 
 A simple software debounce adds a short delay after the interrupt and then re-checks the pin:
 
@@ -320,13 +320,11 @@ int main(void)
 2. Enable the specific interrupt in EIMSK and call `sei()`.
 3. Configure EICRA before enabling the interrupt in EIMSK.
 4. Declare shared variables as `volatile`.
-5. Keep ISRs short — move long processing into the main loop via a flag.
+5. Keep ISRs short; move long processing into the main loop via a flag.
 
 ---
 
 ## Linked Project Files
 
-- [projects/03_button_polling/03_button_polling.c](../../projects/03_button_polling/03_button_polling.c)
-- [projects/04_interrupt_buzzer/04_interrupt_buzzer.c](../../projects/04_interrupt_buzzer/04_interrupt_buzzer.c)
-- [platformio/src/03_button_polling.c](../../platformio/src/03_button_polling.c)
-- [platformio/src/04_interrupt_buzzer.c](../../platformio/src/04_interrupt_buzzer.c)
+- [projects/learning_projects/03_button_polling/03_button_polling.c](../../projects/learning_projects/03_button_polling/03_button_polling.c)
+- [projects/learning_projects/04_interrupt_buzzer/04_interrupt_buzzer.c](../../projects/learning_projects/04_interrupt_buzzer/04_interrupt_buzzer.c)

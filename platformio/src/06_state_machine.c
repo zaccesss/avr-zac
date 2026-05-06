@@ -1,8 +1,13 @@
 /*
- * Test_5.c
+ * 06_state_machine.c
  *
- * Created: 05/05/2026 13:34:08
- * Author : zac
+ * Nine-mode LED state machine for the ATmega644P on the Richard Reeves AVR PCB 2018.
+ * Button on PD2 (INT0) cycles through modes on each falling-edge press.
+ * Modes: chase, blink all, alternate, PWM fade, Knight Rider, binary counter,
+ *        random, reaction game and Tetris melody.
+ *
+ * Hardware: ATmega644P at 20 MHz, Pololu USB AVR Programmer v2.1
+ * Build:    PlatformIO (VS Code), environment 06_state_machine
  */
 
 #include <avr/io.h>             // AVR input/output register definitions

@@ -39,6 +39,30 @@ Write the answer here: ____________
 
 ---
 
+## Breadboard Setup
+
+This session uses the UART header for output and a potentiometer on PA0 for ADC input. No LEDs are required.
+
+**Components required:**
+- 1x 10 kΩ potentiometer
+- 4-wire connection from J7 (Molex KK UART header) to the Pololu USB AVR Programmer v2.1 UART port
+- JP1 jumper fitted on the PCB
+
+**Potentiometer connections (J3, PORTA/ADC header):**
+- Outer leg 1 → VCC (J3 pin 1)
+- Outer leg 2 → GND (J3 pin 10)
+- Wiper → PA0 (J3 pin 2, ADC0)
+
+**UART connections (J7 Molex KK header to Pololu programmer UART port):**
+- Black wire (GND): J7 GND → Pololu programmer GND
+- Orange wire: J7 PD0 (RXD into AVR) → Pololu programmer UART TX output
+- Yellow wire: J7 PD1 (TXD from AVR) → Pololu programmer UART RX input
+- Red wire (VCC): J7 VCC → Pololu programmer VCC
+
+**JP1 must be fitted** to connect AVCC as the ADC reference voltage. Do not remove it.
+
+---
+
 ## Task 1 - Initialise the ADC and Read ADC0
 
 Write the `adc_init` and `adc_read` functions:
@@ -184,11 +208,11 @@ Pass criteria: readings appear in terminal at 250ms intervals with no delays in 
 
 ## Quick Fault Isolation
 
-- **ADC always returns 0** — ADEN not set in ADCSRA, or REFS0 not set in ADMUX.
-- **ADC always returns 1023** — PA0 floating to VCC; confirm potentiometer wiring.
-- **No UART output** — check TXEN0 and UBRR0 as in session 6.
-- **ISR never fires** — TIMSK1 or sei() missing; confirm both present.
-- **Readings jump randomly** — DIDR0 not set; enable it to reduce digital input noise.
+- **ADC always returns 0**: ADEN not set in ADCSRA, or REFS0 not set in ADMUX.
+- **ADC always returns 1023**: PA0 floating to VCC; confirm potentiometer wiring.
+- **No UART output**: check TXEN0 and UBRR0 as in session 6.
+- **ISR never fires**: TIMSK1 or sei() missing; confirm both present.
+- **Readings jump randomly**: DIDR0 not set; enable it to reduce digital input noise.
 
 ---
 
