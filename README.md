@@ -10,7 +10,7 @@
   <a href="https://www.linkedin.com/in/isaacadjei">
     <img src="https://img.shields.io/badge/LinkedIn-Isaac_Adjei-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white">
   </a>
-  <a href="mailto:contact@zacess.com">
+  <a href="mailto:eng@isaacadjei.me">
     <img src="https://img.shields.io/badge/Email-Contact-ff6f61?style=for-the-badge&logo=gmail&logoColor=white">
   </a>
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge">
@@ -178,7 +178,7 @@ Each session has a `notes.md` (reference) and a `lab.md` (hands-on tasks).
 
 Open an [issue](https://github.com/zaccessss/avr-zac/issues) in this repository for questions or bugs.
 
-You can also reach me directly at [contact@zacess.com](mailto:contact@zacess.com) or via my [website contact page](https://isaacadjei.me/contact).
+You can also reach me directly at [eng@isaacadjei.me](mailto:eng@isaacadjei.me) or via my [website contact page](https://isaacadjei.me/contact).
 
 <p align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=80&section=footer" />
