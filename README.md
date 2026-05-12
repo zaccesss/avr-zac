@@ -176,7 +176,7 @@ Each session has a `notes.md` (reference) and a `lab.md` (hands-on tasks).
 
 ## Contact and Support
 
-Open an [issue](https://github.com/zaccessss/avr-zac/issues) in this repository for questions or bugs.
+Open an [issue](https://github.com/zaccesss/avr-zac/issues) in this repository for questions or bugs.
 
 You can also reach me directly at [eng@isaacadjei.me](mailto:eng@isaacadjei.me) or via my [website contact page](https://isaacadjei.me/contact).
 
