@@ -34,7 +34,10 @@ My projects progress from a basic LED blink through GPIO manipulation, button po
 | PCB        | Richard Reeves AVR Project PCB 2019 with LM317T regulator |
 | Programmer | Pololu USB AVR Programmer v2.1 via STK500v2 on COM4       |
 
-The breadboard components (LEDs, button, buzzer) are a temporary configuration I use for learning and change between sessions. See [docs/wiring.md](docs/wiring.md) for the current breadboard connections and header pin assignments. Full PCB component list, connector pinout and power supply circuit are in [hardware/pcb_notes.md](hardware/pcb_notes.md).
+> [!NOTE]
+> The breadboard components (LEDs, button, buzzer) are a temporary configuration I use for learning and change between sessions. [docs/wiring.md](docs/wiring.md) always reflects the current breadboard connections and header pin assignments.
+
+Full PCB component list, connector pinout and power supply circuit are in [hardware/pcb_notes.md](hardware/pcb_notes.md).
 
 ---
 
@@ -53,7 +56,10 @@ Manual flash command if needed:
 C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -B 10 -V -U flash:w:<project>.hex:i
 ```
 
-The `-B 10` flag slows the ISP clock to ~50 kHz, which is required to avoid timeout errors with the Pololu programmer. See [WORKFLOW.md](WORKFLOW.md) for the full flag reference and troubleshooting steps.
+> [!IMPORTANT]
+> The `-B 10` flag slows the ISP clock to ~50 kHz. Leaving it out causes timeout errors with the Pololu programmer.
+
+See [WORKFLOW.md](WORKFLOW.md) for the full flag reference and troubleshooting steps.
 
 ---
 
