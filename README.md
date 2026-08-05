@@ -1,29 +1,8 @@
-<!-- Header -->
-<p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=80&section=header&text=Bare+Metal+AVR&fontSize=28&fontAlignY=38&fontColor=ffffff" />
-</p>
+# Bare Metal AVR
+
+![License](https://img.shields.io/badge/License-MIT-green)
 
 <p align="center">
-  <a href="https://isaacadjei.me">
-    <img src="https://img.shields.io/badge/Website-isaacadjei.me-111111?style=for-the-badge&logo=firefox&logoColor=white">
-  </a>
-  <a href="https://www.linkedin.com/in/isaacadjei">
-    <img src="https://img.shields.io/badge/LinkedIn-Isaac_Adjei-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white">
-  </a>
-  <a href="mailto:eng@isaacadjei.me">
-    <img src="https://img.shields.io/badge/Email-Contact-ff6f61?style=for-the-badge&logo=gmail&logoColor=white">
-  </a>
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge">
-</p>
-
-<p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&pause=1200&color=EE1C25&center=true&vCenter=true&width=600&height=55&lines=ATmega644P+Bare+Metal+C;State+Machines+%7C+Interrupts+%7C+PWM;ADC+%7C+Reaction+Game+%7C+Tetris+Melody;Personal+Embedded+Project+2026" />
-</p>
-
----
-
-<p align="center">
-  🔎 <b>Quick navigation:</b>
   <a href="#overview">Overview</a> •
   <a href="#hardware">Hardware</a> •
   <a href="#getting-started">Getting Started</a> •
@@ -39,19 +18,9 @@
 
 ## Overview
 
-A personal project to learn bare metal AVR C development, writing directly to hardware registers without any framework or abstraction layer. The ATmega644P runs at 20 MHz on a [custom PCB designed by Richard Reeves](hardware/pcb_notes.md) with an external crystal, LM317T voltage regulator and 10-way headers breaking out all 32 I/O pins.
+I built this project to learn bare metal AVR C development, writing directly to hardware registers without any framework or abstraction layer. The ATmega644P runs at 20 MHz on a [custom PCB designed by Richard Reeves](hardware/pcb_notes.md) with an external crystal, LM317T voltage regulator and 10-way headers breaking out all 32 I/O pins. I build everything in C, either with PlatformIO in VS Code or Microchip Studio 7.
 
-Projects progress from a basic LED blink through GPIO manipulation, button polling, interrupt-driven input, software PWM and ADC, building towards a full nine-mode state machine that includes a reaction game and a Tetris melody synced to LEDs. All code targets the ATmega644P and can be built with either [PlatformIO in VS Code](WORKFLOW.md) or Microchip Studio 7. See [WORKFLOW.md](WORKFLOW.md) for the full setup and flash guide.
-
-<a id="tech-stack"></a>
-
-<div align="center">
-
-| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/embeddedc/embeddedc-original.svg" width="65" /> | <img src="https://cdn.simpleicons.org/platformio" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="65" /> | <img src="assets/microchip_studio.png" width="65" /> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width="65" /> | <img src="https://techstack-generator.vercel.app/github-icon.svg" width="65" /> |
-| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| **C** | **Embedded C** | **PlatformIO** | **VS Code** | **Microchip Studio** | **Git** | **GitHub** |
-
-</div>
+My projects progress from a basic LED blink through GPIO manipulation, button polling, interrupt-driven input, software PWM and ADC, building towards a full nine-mode state machine that includes a reaction game and a Tetris melody synced to LEDs. See [WORKFLOW.md](WORKFLOW.md) for the full setup and flash guide.
 
 ---
 
@@ -65,7 +34,7 @@ Projects progress from a basic LED blink through GPIO manipulation, button polli
 | PCB        | Richard Reeves AVR Project PCB 2019 with LM317T regulator |
 | Programmer | Pololu USB AVR Programmer v2.1 via STK500v2 on COM4       |
 
-The breadboard components (LEDs, button, buzzer) are a **temporary configuration** used for learning and change between sessions. See [docs/wiring.md](docs/wiring.md) for the current breadboard connections and header pin assignments. Full PCB component list, connector pinout and power supply circuit are in [hardware/pcb_notes.md](hardware/pcb_notes.md).
+The breadboard components (LEDs, button, buzzer) are a temporary configuration I use for learning and change between sessions. See [docs/wiring.md](docs/wiring.md) for the current breadboard connections and header pin assignments. Full PCB component list, connector pinout and power supply circuit are in [hardware/pcb_notes.md](hardware/pcb_notes.md).
 
 ---
 
@@ -102,7 +71,7 @@ The `-B 10` flag slows the ISP clock to ~50 kHz, which is required to avoid time
 | 5 | [05_state_machine_basic.c](projects/learning_projects/05_state_machine_basic/05_state_machine_basic.c) | Four-mode state machine (initial build) | `enum`, ISR, debounce, `switch` |
 | 6 | [06_state_machine.c](projects/learning_projects/06_state_machine/06_state_machine.c) | Nine-mode state machine (full build) | PWM, ADC, reaction game, Tetris melody |
 
-Source files live in [`projects/learning_projects/`](projects/learning_projects/) (one folder per project). The active project is also copied into [`platformio/src/`](platformio/src/) for building. See [WORKFLOW.md](WORKFLOW.md) for how to switch between projects.
+Source files live in [`projects/learning_projects/`](projects/learning_projects/), one folder per project. The active project's source file is also copied into [`platformio/src/`](platformio/src/) for building. See [WORKFLOW.md](WORKFLOW.md) for how to switch between projects.
 
 ---
 
@@ -133,6 +102,7 @@ Source files live in [`projects/learning_projects/`](projects/learning_projects/
 | Document | Description |
 | -------- | ----------- |
 | [Build and Flash Workflow](WORKFLOW.md) | Full VS Code/PlatformIO and Microchip Studio setup, environment switching, build tasks and troubleshooting |
+| [Microchip Studio Workflow](docs/atmel_studio_workflow.md) | File types, project structure and first-time setup steps specific to Microchip Studio 7 |
 | [Wiring Reference](docs/wiring.md) | Current breadboard connections and header pin tables |
 | [Hardware Notes](docs/hardware_notes.md) | Fuse settings, ISP clock speed, register map and ADC configuration |
 | [PCB Full Reference](hardware/pcb_notes.md) | Component list, connector pinout, power supply circuit and soldering order |
@@ -164,8 +134,6 @@ Each session has a `notes.md` (reference) and a `lab.md` (hands-on tasks).
 
 ---
 
----
-
 <a id="acknowledgements"></a>
 
 ## Acknowledgements
@@ -176,10 +144,4 @@ Each session has a `notes.md` (reference) and a `lab.md` (hands-on tasks).
 
 ## Contact and Support
 
-Open an [issue](https://github.com/zaccesss/avr-zac/issues) in this repository for questions or bugs.
-
-You can also reach me directly at [eng@isaacadjei.me](mailto:eng@isaacadjei.me) or via my [website contact page](https://isaacadjei.me/contact).
-
-<p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=80&section=footer" />
-</p>
+I welcome questions and bug reports as an [issue](https://github.com/zaccesss/avr-zac/issues) in this repository. You can also reach me directly at [eng@isaacadjei.me](mailto:eng@isaacadjei.me) or via my [website contact page](https://isaacadjei.me/contact).

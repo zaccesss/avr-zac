@@ -16,6 +16,7 @@ All notable changes to this project are documented in this file.
 - `docs/C_Operators.pdf` — printable C operator reference card
 
 ### Changed
+- README rewritten: removed the animated capsule-render header/footer banner and the readme-typing-svg text banner, dropped the tech stack icon table in favour of a plain sentence, removed the duplicate top badge row that repeated the Contact and Support section, linked `docs/atmel_studio_workflow.md` from the Documentation Hub, collapsed a double divider and rewrote prose sections in first person
 - `projects/` restructured: all source projects moved into `projects/learning_projects/` (one folder per project)
 - `platformio/src/` reduced to a single active file (`06_state_machine.c`); all other `.c` files removed
 - `platformio/platformio.ini` rewritten to a single environment (`06_state_machine`) with a `[common]` base section; inline comments explain how to switch projects
