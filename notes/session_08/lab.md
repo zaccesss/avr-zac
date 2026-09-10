@@ -218,7 +218,7 @@ Pass criteria:
 
 ## Quick Fault Isolation
 
-- **No response to received characters**: RXEN0 or RXCIE0 not set, or sei() missing.
+- **No response to received characters**: RXEN0 or RXCIE0 not set or sei() missing.
 - **Characters received but ISR seems to fire twice**: check the terminal is not sending CRLF after each character.
 - **Blue LED stops blinking when typing**: ISR is taking too long; move processing out of the ISR via a flag.
 - **ADC returns 0 in Task 4**: adc_init() not called or ADMUX not set.

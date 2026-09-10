@@ -8,7 +8,7 @@ Clock: 20 MHz external crystal.
 
 ## Lab Goal
 
-Configure Timer 0 to generate hardware PWM on the green and blue LEDs, control LED brightness by writing to OCR0A and OCR0B, and generate a waveform by stepping through a lookup table.
+Configure Timer 0 to generate hardware PWM on the green and blue LEDs, control LED brightness by writing to OCR0A and OCR0B and generate a waveform by stepping through a lookup table.
 
 ---
 
@@ -207,7 +207,7 @@ Adjust the delay to produce a 50 Hz waveform and recalculate.
 
 ## Quick Fault Isolation
 
-- **LED stays fully off**: COM0B1 not set in TCCR0A, or DDR bit not set. Check both.
+- **LED stays fully off**: COM0B1 not set in TCCR0A or DDR bit not set. Check both.
 - **LED stays fully on**: WGM bits wrong. Confirm WGM01=1 and WGM00=1 in TCCR0A.
 - **Fade is not smooth**: step delay too large. Reduce delay value or increase table length.
 - **Both LEDs behave the same**: COM0A1 missing for the green channel. Add it to TCCR0A.

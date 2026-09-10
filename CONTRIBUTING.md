@@ -69,7 +69,7 @@ chore: add ATmega644P datasheet to hardware/
 ### Markdown files
 
 - UK English throughout: initialise, behaviour, colour, programme.
-- No em dashes (`—`) or en dashes (`–`). Use a colon for definitions, a semicolon or comma for connectors, or reword.
+- No em dashes (`-`) or en dashes (`-`). Use a colon for definitions, a semicolon or comma for connectors or reword.
 - No Oxford comma (no comma before the final "and" or "or" in a list of three or more items).
 - Headings use sentence case, not title case.
 - Tables should have aligned column separators.
