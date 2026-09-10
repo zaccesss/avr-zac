@@ -208,7 +208,7 @@ Pass criteria: readings appear in terminal at 250ms intervals with no delays in 
 
 ## Quick Fault Isolation
 
-- **ADC always returns 0**: ADEN not set in ADCSRA, or REFS0 not set in ADMUX.
+- **ADC always returns 0**: ADEN not set in ADCSRA or REFS0 not set in ADMUX.
 - **ADC always returns 1023**: PA0 floating to VCC; confirm potentiometer wiring.
 - **No UART output**: check TXEN0 and UBRR0 as in session 6.
 - **ISR never fires**: TIMSK1 or sei() missing; confirm both present.

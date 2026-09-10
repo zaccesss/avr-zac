@@ -131,7 +131,7 @@ Maximum time with each prescaler at 20 MHz:
 
 ## Output-Compare Mode (CTC)
 
-Output-compare mode (also called Clear Timer on Compare, CTC) counts from 0 up to the value stored in OCR1A, resets to 0 in hardware at the next clock edge, and optionally triggers an interrupt. There is no software reload, so timing is exact.
+Output-compare mode (also called Clear Timer on Compare, CTC) counts from 0 up to the value stored in OCR1A, resets to 0 in hardware at the next clock edge and optionally triggers an interrupt. There is no software reload, so timing is exact.
 
 ### CTC time calculation
 

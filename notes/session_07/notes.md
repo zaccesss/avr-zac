@@ -259,7 +259,7 @@ int main(void)
 
 1. JP1 must be fitted for AVCC reference.
 2. Set ADEN before starting a conversion with ADSC.
-3. Always read ADCL before ADCH, or use the combined `ADC` macro.
+3. Always read ADCL before ADCH or use the combined `ADC` macro.
 4. Use prescaler 128 for full 10-bit accuracy at 20 MHz.
 5. Do not drive an analogue input pin as a digital output.
 6. Disable digital input buffers on ADC pins with DIDR0 to reduce noise.
