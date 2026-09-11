@@ -6,6 +6,11 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-11
+
+First tagged release. Every entry above this point had been sitting on `main` undocumented as a
+real version; this repo's changelog used session dates rather than version numbers until now.
+
 ### Added
 - `.editorconfig` at repo root: UTF-8, LF line endings, 4-space indent, trim trailing whitespace
 - `projects/lab_projects/`, `projects/personal_projects/`, `projects/practice_projects/`, `projects/other_projects/` - empty category folders for future work
