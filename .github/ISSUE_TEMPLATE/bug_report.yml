@@ -1,0 +1,47 @@
+name: Bug report
+description: Something is broken or not working as expected
+title: "fix: "
+labels: ["bug"]
+assignees:
+  - zaccesss
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What
+      description: A short sentence explaining what this issue covers.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: Why does this need fixing? What problem does it cause?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Anything extra - links, related issues, edge cases to watch for.
+    validations:
+      required: false
