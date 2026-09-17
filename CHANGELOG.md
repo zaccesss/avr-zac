@@ -10,6 +10,7 @@ All notable changes to this project are documented in this file.
 
 - CODEOWNERS, SECURITY.md, CODE_OF_CONDUCT.md, SUPPORT.md
 - `.markdownlint.json` and a markdown-lint CI workflow, with its own workflows README
+- `.github/ISSUE_TEMPLATE/config.yml` disabling the blank issue option, pointing to the security policy and eng@isaacadjei.me instead
 
 ### Changed
 
