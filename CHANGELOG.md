@@ -22,6 +22,7 @@ First tagged release. Every entry above this point had been sitting on `main` un
 real version; this repo's changelog used session dates rather than version numbers until now.
 
 ### Added
+
 - `.editorconfig` at repo root: UTF-8, LF line endings, 4-space indent, trim trailing whitespace
 - `projects/lab_projects/`, `projects/personal_projects/`, `projects/practice_projects/`, `projects/other_projects/` - empty category folders for future work
 - Breadboard Setup section in every lab file (sessions 1-8) with PCB header pin, component and wiring instructions for replicating each circuit on breadboard
@@ -31,6 +32,7 @@ real version; this repo's changelog used session dates rather than version numbe
 - `docs/C_Operators.pdf` - printable C operator reference card
 
 ### Changed
+
 - README: breadboard-is-temporary note and the avrdude `-B 10` flag explanation converted to markdown alert callouts (`[!NOTE]`, `[!IMPORTANT]`) so they stand out from surrounding prose
 - README rewritten: removed the animated capsule-render header/footer banner and the readme-typing-svg text banner, dropped the tech stack icon table in favour of a plain sentence, removed the duplicate top badge row that repeated the Contact and Support section, linked `docs/atmel_studio_workflow.md` from the Documentation Hub, collapsed a double divider and rewrote prose sections in first person
 - `projects/` restructured: all source projects moved into `projects/learning_projects/` (one folder per project)
@@ -47,6 +49,7 @@ real version; this repo's changelog used session dates rather than version numbe
 - `notes/general/c_operators.md` cleaned up: removed stale attribution line
 
 ### Added (previous unreleased)
+
 - `CHANGELOG.md` (this file)
 
 ---
@@ -54,10 +57,12 @@ real version; this repo's changelog used session dates rather than version numbe
 ## [2026-05-06] - Session notes full rewrite (PR #20)
 
 ### Added
+
 - `notes/general/c_operators.md` - full C operator reference with precedence table, AVR bit manipulation patterns and GPIO mask warnings
 - `notes/general/hardware.md` - PCB overview, power supply (JP1/JP2), all port headers (J1-J7), crystal, fuse summary and component list
 
 ### Changed
+
 All eight session notes and labs rewritten to match actual hardware (ATmega644P, Pololu USB AVR Programmer v2.1, Richard Reeves PCB 2018) and reorganised into the correct topic order:
 
 | Session | Topic |
@@ -74,6 +79,7 @@ All eight session notes and labs rewritten to match actual hardware (ATmega644P,
 Each session note now covers the topic theory with correct register names, pin assignments and code examples. Each lab has ordered tasks, expected results, pass criteria and a fault isolation section.
 
 ### Removed
+
 - Old flat-file session notes that referenced incorrect hardware, a different MCU (ATmega164P), Proteus simulation and university course context
 
 ---
@@ -81,6 +87,7 @@ Each session note now covers the topic theory with correct register names, pin a
 ## [2025-12] - Session notes initial pass (PRs #4-#18)
 
 ### Added
+
 - `notes/session_01/` through `notes/session_08/` - first pass of session notes and lab guides. Topics at this stage reflected an earlier project structure (GPIO outputs, state machines, reaction game, Tetris melody) rather than the final session topic order.
 - `WORKFLOW.md` - complete build and flash guide for PlatformIO in VS Code and Microchip Studio 7, including environment switching, manual avrdude commands, fuse restoration and troubleshooting
 - `docs/wiring.md` - breadboard connections, header pin tables for J3 to J6
@@ -89,6 +96,7 @@ Each session note now covers the topic theory with correct register names, pin a
 - `docs/atmel_studio_workflow.md` - step-by-step Microchip Studio 7 first-time setup
 
 ### Changed
+
 - README expanded with clickable links, Getting Started section, project table and Documentation Hub (PRs #2, #4)
 
 ---
@@ -96,6 +104,7 @@ Each session note now covers the topic theory with correct register names, pin a
 ## [2025-11] - Initial commit
 
 ### Added
+
 - `projects/01_blink/` - double blink on PB0
 - `projects/02_led_cycle/` - five LEDs cycling sequentially
 - `projects/03_button_polling/` - button drives buzzer via polling
