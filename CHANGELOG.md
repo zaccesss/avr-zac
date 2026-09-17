@@ -6,6 +6,16 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- CODEOWNERS, SECURITY.md, CODE_OF_CONDUCT.md, SUPPORT.md
+- `.markdownlint.json` and a markdown-lint CI workflow, with its own workflows README
+
+### Changed
+
+- `bug_report.md` and `enhancement.md` converted to YAML issue forms, matching the structured issue-form standard used across my other repositories
+- README's Contact and Support section now links out to SUPPORT.md and SECURITY.md via callouts
+
 ## [1.0.0] - 2026-09-11
 
 First tagged release. Every entry above this point had been sitting on `main` undocumented as a

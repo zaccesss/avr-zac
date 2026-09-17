@@ -1,0 +1,37 @@
+name: Enhancement
+description: New feature or improvement
+title: "feat: "
+labels: ["enhancement"]
+assignees:
+  - zaccesss
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What
+      description: A short sentence explaining what this issue covers.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: Why does this need doing? What problem does it solve?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Anything extra - links, related issues, edge cases to watch for.
+    validations:
+      required: false
