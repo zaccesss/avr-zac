@@ -150,4 +150,8 @@ Each session has a `notes.md` (reference) and a `lab.md` (hands-on tasks).
 
 ## Contact and Support
 
-I welcome questions and bug reports as an [issue](https://github.com/zaccesss/avr-zac/issues) in this repository. You can also reach me directly at [eng@isaacadjei.me](mailto:eng@isaacadjei.me) or via my [website contact page](https://isaacadjei.me/contact).
+> [!TIP]
+> I welcome questions and bug reports as an [issue](https://github.com/zaccesss/avr-zac/issues) in this repository. See [SUPPORT.md](SUPPORT.md) for where to go first. You can also reach me directly at [eng@isaacadjei.me](mailto:eng@isaacadjei.me) or via my [website contact page](https://isaacadjei.me/contact).
+
+> [!IMPORTANT]
+> Found a security issue? Do not open a public issue, see [SECURITY.md](SECURITY.md) for how to report it privately.
