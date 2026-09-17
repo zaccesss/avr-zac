@@ -1,0 +1,12 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Security issue
+    url: https://github.com/zaccesss/avr-zac/security/policy
+    about: Report privately following SECURITY.md, never a public issue.
+  - name: Hardware or build setup question
+    url: mailto:eng@isaacadjei.me
+    about: Reach me directly at eng@isaacadjei.me for questions about the PCB or build.
+  - name: Prefer the website?
+    url: https://isaacadjei.me/contact
+    about: Reach me through my contact page instead.
