@@ -1,8 +1,8 @@
 /*
  * Test_4.c
  *
- * Created: 05/05/2026 13:28:57
- * Author : zac
+ * created: 05/05/2026 13:28:57
+ * author : zac
  */ 
 
 #define F_CPU 20E6              // 20 MHz external crystal
@@ -11,62 +11,62 @@
 #include <avr/interrupt.h>      // AVR interrupt definitions
 
 // LED pins on PORTB
-#define LED_RED    PB0          // Red LED
-#define LED_YELLOW PB1          // Yellow LED
-#define LED_WHITE  PB2          // White LED
-#define LED_GREEN  PB3          // Green LED
-#define LED_BLUE   PB4          // Blue LED
-#define BUZZER     PD3          // Active buzzer on PORTD
-#define BUTTON     PD2          // Push button input (INT0 pin)
+#define LED_RED    PB0          // red LED
+#define LED_YELLOW PB1          // yellow LED
+#define LED_WHITE  PB2          // white LED
+#define LED_GREEN  PB3          // green LED
+#define LED_BLUE   PB4          // blue LED
+#define BUZZER     PD3          // active buzzer on PORTD
+#define BUTTON     PD2          // push button input (INT0 pin)
 
 int main(void)
 {
-    // Set LEDs as outputs on PORTB
+    // set LEDs as outputs on PORTB
     DDRB |= (1<<LED_RED) | (1<<LED_YELLOW) | (1<<LED_WHITE) | (1<<LED_GREEN) | (1<<LED_BLUE);
 
-    // Set buzzer as output on PORTD
+    // set buzzer as output on PORTD
     DDRD |= (1<<BUZZER);
 
-    // Set button as input on PORTD
+    // set button as input on PORTD
     DDRD &= ~(1<<BUTTON);
 
-    // Configure INT0 (PD2) to trigger on any logic change
-    EICRA |= (1<<ISC00);        // Trigger on any change of INT0
-    EIMSK |= (1<<INT0);         // Enable INT0 interrupt
+    // configure INT0 (PD2) to trigger on any logic change
+    EICRA |= (1<<ISC00);        // trigger on any change of INT0
+    EIMSK |= (1<<INT0);         // enable INT0 interrupt
 
-    // Enable global interrupts
+    // enable global interrupts
     sei();
 
     while (1)
     {
         // LEDs cycle continuously regardless of button
-        PORTB |= 1<<LED_RED;            // Red on
-        _delay_ms(500);                 // Wait 500 ms
-        PORTB &= ~(1<<LED_RED);         // Red off
+        PORTB |= 1<<LED_RED;            // red on
+        _delay_ms(500);                 // wait 500 ms
+        PORTB &= ~(1<<LED_RED);         // red off
 
-        PORTB |= 1<<LED_YELLOW;         // Yellow on
-        _delay_ms(500);                 // Wait 500 ms
-        PORTB &= ~(1<<LED_YELLOW);      // Yellow off
+        PORTB |= 1<<LED_YELLOW;         // yellow on
+        _delay_ms(500);                 // wait 500 ms
+        PORTB &= ~(1<<LED_YELLOW);      // yellow off
 
-        PORTB |= 1<<LED_WHITE;          // White on
-        _delay_ms(500);                 // Wait 500 ms
-        PORTB &= ~(1<<LED_WHITE);       // White off
+        PORTB |= 1<<LED_WHITE;          // white on
+        _delay_ms(500);                 // wait 500 ms
+        PORTB &= ~(1<<LED_WHITE);       // white off
 
-        PORTB |= 1<<LED_GREEN;          // Green on
-        _delay_ms(500);                 // Wait 500 ms
-        PORTB &= ~(1<<LED_GREEN);       // Green off
+        PORTB |= 1<<LED_GREEN;          // green on
+        _delay_ms(500);                 // wait 500 ms
+        PORTB &= ~(1<<LED_GREEN);       // green off
 
-        PORTB |= 1<<LED_BLUE;           // Blue on
-        _delay_ms(500);                 // Wait 500 ms
-        PORTB &= ~(1<<LED_BLUE);        // Blue off
+        PORTB |= 1<<LED_BLUE;           // blue on
+        _delay_ms(500);                 // wait 500 ms
+        PORTB &= ~(1<<LED_BLUE);        // blue off
     }
 }
 
-// Interrupt Service Routine for INT0 (PD2 button)
+// interrupt Service Routine for INT0 (PD2 button)
 ISR(INT0_vect)
 {
-    if (PIND & (1<<BUTTON))             // If button is pressed (HIGH)
-        PORTD |= (1<<BUZZER);           // Buzzer on
+    if (PIND & (1<<BUTTON))             // if button is pressed (HIGH)
+        PORTD |= (1<<BUZZER);           // buzzer on
     else
-        PORTD &= ~(1<<BUZZER);          // Buzzer off
+        PORTD &= ~(1<<BUZZER);          // buzzer off
 }

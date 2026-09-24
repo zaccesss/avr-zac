@@ -1,8 +1,8 @@
 /*
  * Test_1.c
  *
- * Created: 30/04/2026 04:01:36
- * Author : zac
+ * created: 30/04/2026 04:01:36
+ * author : zac
  */
 
 #define F_CPU 20E6              // 20 MHz external crystal
@@ -10,24 +10,24 @@
 #include <util/delay.h>         // AVR delay functions
 
 #define Test_Pin PB0            // LED connected to Port B, pin 0
-#define Loop_Delay 1000         // Delay in milliseconds
+#define Loop_Delay 1000         // delay in milliseconds
 
 int main(void)
 {
-	DDRB = 1<<Test_Pin;         // Set Test_Pin as output
+	DDRB = 1<<Test_Pin;         // set Test_Pin as output
 
 	while (1)
 	{
-		// First blink
+		// first blink
 		PORTB |= 1<<Test_Pin;       // LED on
-		_delay_ms(2000);             // Wait 2000 ms
+		_delay_ms(2000);             // wait 2000 ms
 		PORTB &= ~(1<<Test_Pin);    // LED off
-		_delay_ms(1000);             // Wait 1000 ms
+		_delay_ms(1000);             // wait 1000 ms
 
-		// Second blink
+		// second blink
 		//PORTB |= 1<<Test_Pin;       // LED on
-		//_delay_ms(100);             // Wait 100 ms
+		//_delay_ms(100);             // wait 100 ms
 		//PORTB &= ~(1<<Test_Pin);    // LED off
-		//_delay_ms(500);             // Pause 500 ms before repeating
+		//_delay_ms(500);             // pause 500 ms before repeating
 	}
 }
