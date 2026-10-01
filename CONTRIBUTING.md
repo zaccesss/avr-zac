@@ -68,9 +68,6 @@ chore: add ATmega644P datasheet to hardware/
 
 ### Markdown files
 
-- UK English throughout: initialise, behaviour, colour, programme.
-- No em dashes (`-`) or en dashes (`-`). Use a colon for definitions, a semicolon or comma for connectors or reword.
-- No Oxford comma (no comma before the final "and" or "or" in a list of three or more items).
 - Headings use sentence case, not title case.
 - Tables should have aligned column separators.
 
@@ -95,8 +92,6 @@ Before opening a PR, confirm:
 
 - [ ] Branch name follows the convention above
 - [ ] Commit messages follow the format above
-- [ ] No em or en dashes introduced in any Markdown file
-- [ ] No UK English spelling errors (behaviour, initialise, colour, programme)
 - [ ] All code snippets have thorough inline comments
 - [ ] Links in Markdown files resolve to existing files
 - [ ] If a new project file is added, the README projects table is updated

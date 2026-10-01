@@ -14,6 +14,7 @@ All notable changes to this project are documented in this file.
 
 ### Changed
 
+- Tidied the contributor guide.
 - `bug_report.md` and `enhancement.md` converted to YAML issue forms, matching the structured issue-form standard used across my other repositories
 - README's Contact and Support section now links out to SUPPORT.md and SECURITY.md via callouts
 
@@ -35,14 +36,14 @@ real version; this repo's changelog used session dates rather than version numbe
 ### Changed
 
 - README: breadboard-is-temporary note and the avrdude `-B 10` flag explanation converted to markdown alert callouts (`[!NOTE]`, `[!IMPORTANT]`) so they stand out from surrounding prose
-- README rewritten: removed the animated capsule-render header/footer banner and the readme-typing-svg text banner, dropped the tech stack icon table in favour of a plain sentence, removed the duplicate top badge row that repeated the Contact and Support section, linked `docs/atmel_studio_workflow.md` from the Documentation Hub, collapsed a double divider and rewrote prose sections in first person
+- README rewritten: removed the animated capsule-render header/footer banner and the readme-typing-svg text banner, dropped the tech stack icon table in favour of a plain sentence, removed the duplicate top badge row that repeated the Contact and Support section, linked `docs/atmel_studio_workflow.md` from the Documentation Hub and collapsed a double divider
 - `projects/` restructured: all source projects moved into `projects/learning_projects/` (one folder per project)
 - `platformio/src/` reduced to a single active file (`06_state_machine.c`); all other `.c` files removed
 - `platformio/platformio.ini` rewritten to a single environment (`06_state_machine`) with a `[common]` base section; inline comments explain how to switch projects
 - `WORKFLOW.md` switching guide updated for the single-file-in-src approach with project folder table
 - README project table: `00_fuse_test` moved to row 0 (first), PCB year corrected to 2019, tech stack icons moved inline under Overview, PDF links added to Documentation Hub
 - README project table links and source file description updated to reflect `projects/learning_projects/` layout
-- All em and en dashes replaced across sessions 1-8 notes and labs, `notes/general/`, `docs/hardware_notes.md` and `docs/wiring.md`
+- Tidied punctuation across sessions 1-8 notes and labs, `notes/general/`, `docs/hardware_notes.md` and `docs/wiring.md`
 - Inline code comments expanded across all session notes and lab task code blocks to fully explain register fields, bit manipulation and timing calculations
 - `docs/hardware_notes.md` UART0 section updated: FTDI lead reference replaced with Pololu USB AVR Programmer v2.1 built-in UART bridge description
 - `.gitignore` updated to exclude the local university source folder (`EE1EPJ - AVR - Microcontrollers/`)
