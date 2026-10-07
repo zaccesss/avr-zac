@@ -214,10 +214,10 @@ The expression `PORTB = PIND;` does the same thing in one line.
 Manual avrdude command:
 
 ```bash
-C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -B 10 -V -U flash:w:.pio\build\ATmega644P\firmware.hex:i
+C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -b 57600 -B 40 -V -U flash:w:.pio\build\01_blink\firmware.hex:i
 ```
 
-The `-B 10` flag slows the ISP clock to approximately 50kHz, which is required with the Pololu programmer to avoid timeout errors.
+The `-B 40` flag slows the ISP clock to approximately 25 kHz, which the Pololu programmer needs to avoid timeout errors. `-b 57600` sets the serial baud rate. Both match `upload_flags` in `platformio/platformio.ini`.
 
 ---
 

@@ -18,7 +18,7 @@ SPI programming enabled and JTAG disabled.
 ### Restore Fuses with avrdude
 
 ```
-C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -F -U lfuse:w:0xFF:m -U hfuse:w:0xD1:m -U efuse:w:0xFF:m
+C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -b 57600 -B 40 -F -U lfuse:w:0xFF:m -U hfuse:w:0xD1:m -U efuse:w:0xFF:m
 ```
 
 Use the `-F` flag to force the operation even if the device signature check fails. This is
@@ -32,13 +32,14 @@ The Pololu USB AVR Programmer v2.1 communicates via the STK500v2 protocol. The I
 must be slowed to avoid timeout errors, particularly after a fuse change has altered the CPU
 clock source.
 
-Always use the `-B 10` flag with avrdude to set a slower ISP bit clock:
+Always use the `-B 40` flag with avrdude to set a slower ISP bit clock, together with `-b 57600`, as
+`upload_flags` in `platformio/platformio.ini` does:
 
 ```
-C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -B 10 -V -U flash:w:firmware.hex:i
+C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -b 57600 -B 40 -V -U flash:w:firmware.hex:i
 ```
 
-The `-B 10` flag sets the ISP bit clock period to 10 microseconds (approximately 50kHz). Without
+The `-B 40` flag sets the ISP bit clock period to 40 microseconds (approximately 25 kHz). Without
 this flag, programming may fail with a timeout error.
 
 ---
