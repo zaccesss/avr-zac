@@ -53,11 +53,11 @@ Full PCB component list, connector pinout and power supply circuit are in [hardw
 Manual flash command if needed:
 
 ```
-C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -B 10 -V -U flash:w:<project>.hex:i
+C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -b 57600 -B 40 -V -U flash:w:<project>.hex:i
 ```
 
 > [!IMPORTANT]
-> The `-B 10` flag slows the ISP clock to ~50 kHz. Leaving it out causes timeout errors with the Pololu programmer.
+> These flags match `upload_flags` in `platformio/platformio.ini`. `-B 40` slows the ISP bit clock to about 25 kHz and `-b 57600` sets the serial baud rate. Leaving `-B` out causes timeout errors with the Pololu programmer.
 
 See [WORKFLOW.md](WORKFLOW.md) for the full flag reference and troubleshooting steps.
 

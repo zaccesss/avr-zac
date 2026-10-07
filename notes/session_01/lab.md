@@ -124,7 +124,7 @@ Pass criteria: correct colour order, no skipped states over 10 cycles.
 
 | Symptom                     | Likely cause                         | Fix                                            |
 | --------------------------- | ------------------------------------ | ---------------------------------------------- |
-| Upload times out            | Wrong COM port or ISP clock too fast | Confirm COM4 and `-B 10` in platformio.ini     |
+| Upload times out            | Wrong COM port or ISP clock too fast | Confirm COM4 and `-B 40` in platformio.ini     |
 | No LED activity after flash | DDR bit not set or wiring wrong      | Check DDRB mask and J4 wiring                  |
 | Wrong LED lights            | Pin map mismatch                     | Cross-check colour against wiring table        |
 | Build error on `F_CPU`      | Missing define in Microchip Studio   | Add `#define F_CPU 20E6` before includes       |

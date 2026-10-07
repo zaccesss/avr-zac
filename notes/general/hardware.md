@@ -88,7 +88,7 @@ C1 and C2 are on the PCB. No external crystal circuit is needed on the breadboar
 Fuse restoration command (use only if fuses are corrupted):
 
 ```
-C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -F -U lfuse:w:0xFF:m -U hfuse:w:0xD1:m -U efuse:w:0xFF:m
+C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -b 57600 -B 40 -F -U lfuse:w:0xFF:m -U hfuse:w:0xD1:m -U efuse:w:0xFF:m
 ```
 
 The `-F` flag overrides the signature check and should only be used for fuse recovery.
