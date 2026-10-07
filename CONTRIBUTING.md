@@ -76,7 +76,7 @@ chore: add ATmega644P datasheet to hardware/
 - Every non-trivial line must have an inline comment explaining what it does and why, not just what the register is called.
 - Use register names as defined in `<avr/io.h>` (e.g. `DDRB`, `TCCR0A`, `OCR0A`).
 - Bit names must match the datasheet (e.g. `WGM01`, `COM0A1`).
-- Optimisation flag must remain `-O0` for `_delay_ms` to work correctly.
+- Builds use `-Os`, as set in `platformio/platformio.ini`. `util/delay.h` needs optimisation on for accurate delays, so `_delay_ms` and `_delay_us` take constants only.
 
 ### Source files
 
