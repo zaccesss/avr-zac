@@ -133,33 +133,45 @@ void debounce_delay(void)
     _delay_ms(20);              // wait 20 ms for button to settle
 }
 
-// software PWM fade on all LEDs
+// software PWM fade on all LEDs. Each frame is 256 steps long and the LEDs stay on for the
+// first `duty` steps, so a frame lasts about 0.7 ms (roughly 1.4 kHz, too fast to see flicker)
+// and only the on/off ratio changes. Ramping the duty from 0 to 255 and back fades the LEDs up
+// and down, about 0.7 s each way.
+#define FADE_FRAMES_PER_LEVEL 4     // frames shown at each brightness level, sets the fade speed
+
+static void pwm_frame(uint8_t duty)
+{
+    uint8_t step = 0;
+
+    do
+    {
+        PORTB = (step < duty) ? ALL_LEDS : 0x00;    // on for the first duty steps, off after
+        _delay_us(2);                               // fixed step length
+    } while (++step != 0);                          // 256 steps, wraps back to 0
+}
+
 void pwm_fade(void)
 {
-    uint8_t i;
-    uint8_t j;
+    uint16_t level;
+    uint8_t frame;
 
-    // fade in
-    for (i = 0; i < 255; i++)
+    // fade in - duty rises from 0 (off) to 255 (fully on)
+    for (level = 0; level <= 255; level++)
     {
-        for (j = 0; j < 50; j++)       // repeat each brightness level 50 times
+        for (frame = 0; frame < FADE_FRAMES_PER_LEVEL; frame++)
         {
-            PORTB = ALL_LEDS;           // all LEDs on
-            _delay_us(1);               // fixed on time
+            pwm_frame((uint8_t)level);
         }
-        PORTB = 0x00;                   // all LEDs off
-        _delay_ms(1);                   // fixed off time
     }
 
-    // fade out
-    for (i = 255; i > 0; i--)
+    // fade out - duty falls from 255 back to 0
+    for (level = 256; level > 0; level--)
     {
-        for (j = 0; j < 50; j++)       // repeat each brightness level 50 times
+        for (frame = 0; frame < FADE_FRAMES_PER_LEVEL; frame++)
         {
-            PORTB = ALL_LEDS;           // all LEDs on
-            _delay_us(1);               // fixed on time
+            pwm_frame((uint8_t)(level - 1));
         }
-        PORTB = 0x00;                   // all LEDs off
-        _delay_ms(1);                   // fixed off time
     }
+
+    PORTB = 0x00;                                   // leave every LED off
 }
