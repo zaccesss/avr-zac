@@ -17,6 +17,14 @@ All notable changes to this project are documented in this file.
 - Tidied the contributor guide.
 - `bug_report.md` and `enhancement.md` converted to YAML issue forms, matching the structured issue-form standard used across my other repositories
 - README's Contact and Support section now links out to SUPPORT.md and SECURITY.md via callouts
+- `WORKFLOW.md` matches `platformio/platformio.ini`: the active environment is `01_blink`, builds use `-Os` and uploads use `-b 57600 -B 40`. The manual avrdude and fuse commands use the same flags. The task section describes the PlatformIO IDE's own tasks instead of a `tasks.json` the repo does not carry
+- `CONTRIBUTING.md` asks for `-Os` instead of `-O0`, matching `platformio.ini`
+
+### Fixed
+
+- `tone()` in `06_state_machine.c` plays each note at its real frequency. It used to toggle the buzzer at a fixed 2 kHz and use the frequency only for the note length. It now times each half period with Timer1 in CTC mode and keeps the same signature
+- PWM Fade mode in `05_state_machine.c`, `05_state_machine_basic.c` and `06_state_machine.c` fades the LEDs up and down. The duty cycle never changed before, so the LEDs sat at one dim level. It now ramps the on time from 0 to 255 steps and back
+- `06_state_machine.c` builds with `-Os`. The Tetris rest passed a variable to `_delay_ms`, which needs a constant once optimisation is on. Rests now repeat a fixed 1 ms delay
 
 ## [1.0.0] - 2026-09-11
 

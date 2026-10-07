@@ -199,36 +199,47 @@ void startup_animation(void)
     _delay_ms(200);
 }
 
-// software PWM fade - rapidly toggles LEDs to simulate brightness levels
-// longer on time = brighter, shorter on time = dimmer
+// software PWM fade on all LEDs. Each frame is 256 steps long and the LEDs stay on for the
+// first `duty` steps, so a frame lasts about 0.7 ms (roughly 1.4 kHz, too fast to see flicker)
+// and only the on/off ratio changes. Ramping the duty from 0 to 255 and back fades the LEDs up
+// and down, about 0.7 s each way.
+#define FADE_FRAMES_PER_LEVEL 4     // frames shown at each brightness level, sets the fade speed
+
+static void pwm_frame(uint8_t duty)
+{
+    uint8_t step = 0;
+
+    do
+    {
+        PORTB = (step < duty) ? ALL_LEDS : 0x00;    // on for the first duty steps, off after
+        _delay_us(2);                               // fixed step length
+    } while (++step != 0);                          // 256 steps, wraps back to 0
+}
+
 void pwm_fade(void)
 {
-    uint8_t i;
-    uint8_t j;
+    uint16_t level;
+    uint8_t frame;
 
-    // fade in - on time increases from 0 to 254
-    for (i = 0; i < 255; i++)
+    // fade in - duty rises from 0 (off) to 255 (fully on)
+    for (level = 0; level <= 255; level++)
     {
-        for (j = 0; j < 50; j++)               // repeat each level 50 times for visibility
+        for (frame = 0; frame < FADE_FRAMES_PER_LEVEL; frame++)
         {
-            PORTB = ALL_LEDS;                   // LEDs on
-            _delay_us(1);                       // fixed on time
+            pwm_frame((uint8_t)level);
         }
-        PORTB = 0x00;                           // LEDs off
-        _delay_ms(1);                           // fixed off time
     }
 
-    // fade out - on time decreases from 254 to 1
-    for (i = 255; i > 0; i--)
+    // fade out - duty falls from 255 back to 0
+    for (level = 256; level > 0; level--)
     {
-        for (j = 0; j < 50; j++)
+        for (frame = 0; frame < FADE_FRAMES_PER_LEVEL; frame++)
         {
-            PORTB = ALL_LEDS;
-            _delay_us(1);
+            pwm_frame((uint8_t)(level - 1));
         }
-        PORTB = 0x00;
-        _delay_ms(1);
     }
+
+    PORTB = 0x00;                                   // leave every LED off
 }
 
 // knight Rider sweep - single LED moves right then left repeatedly
@@ -332,20 +343,51 @@ void reaction_game(void)
     }
 }
 
-// generate a buzzer tone using fixed 250us half period (approx 2kHz)
-// freq parameter is kept for future improvement when variable delay is possible
+// wait for a duration only known at run time. _delay_ms needs a compile-time constant once
+// optimisation is on, so this repeats a fixed 1 ms delay instead.
+static void rest_ms(uint16_t duration_ms)
+{
+    while (duration_ms--)
+    {
+        _delay_ms(1);
+    }
+}
+
+// generate a square wave at freq Hz on the buzzer for duration_ms. Timer1 runs in CTC mode with
+// a prescaler of 8 (2.5 MHz ticks at 20 MHz), so OCR1A sets the half period: 440 Hz needs about
+// 2,840 ticks. The compare flag is polled rather than handled in an ISR, so the timing does not
+// depend on how long each loop takes. Frequencies from 20 Hz upwards fit in 16 bits.
 void tone(uint16_t freq, uint16_t duration_ms)
 {
-    uint16_t i;
-    uint16_t cycles = (uint32_t)duration_ms * freq / 1000;     // number of on/off cycles
+    uint32_t half_periods;
+    uint32_t i;
 
-    for (i = 0; i < cycles; i++)
+    if (freq == 0)
     {
-        PORTD |= (1<<BUZZER);                   // buzzer on
-        _delay_us(250);                         // fixed half period
-        PORTD &= ~(1<<BUZZER);                  // buzzer off
-        _delay_us(250);                         // fixed half period
+        rest_ms(duration_ms);                   // a zero frequency is a rest
+        return;
     }
+
+    half_periods = (uint32_t)freq * 2 * duration_ms / 1000;    // two toggles per cycle
+
+    TCCR1A = 0;                                 // normal port operation, CTC uses WGM12 only
+    TCCR1B = 0;                                 // stop the timer while it is set up
+    TCNT1 = 0;
+    OCR1A = (uint16_t)((F_CPU / 8UL) / (2UL * freq) - 1);      // ticks per half period
+    TIFR1 = (1<<OCF1A);                         // clear any stale compare flag
+    TCCR1B = (1<<WGM12) | (1<<CS11);            // CTC mode, prescaler 8, timer starts
+
+    for (i = 0; i < half_periods; i++)
+    {
+        while (!(TIFR1 & (1<<OCF1A)))           // wait for the end of this half period
+        {
+        }
+        TIFR1 = (1<<OCF1A);                     // writing 1 clears the flag
+        PORTD ^= (1<<BUZZER);                   // flip the buzzer pin
+    }
+
+    TCCR1B = 0;                                 // stop the timer
+    PORTD &= ~(1<<BUZZER);                      // leave the buzzer off
 }
 
 // tetris theme melody with LEDs cycling in time with the notes
@@ -371,7 +413,7 @@ void music_mode(void)
         PORTB = (1<<(i % 5));                   // cycle through LEDs in time with notes
 
         if (melody[i][0] == 0)
-            _delay_ms(melody[i][1]);            // rest - just wait
+            rest_ms(melody[i][1]);              // rest - just wait
         else
             tone(melody[i][0], melody[i][1]);   // play the note
 
