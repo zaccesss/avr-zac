@@ -11,7 +11,7 @@ This repository holds bare metal AVR C firmware, hardware documentation and pers
 
 If you find a security issue in this repository, please do not open a public issue. Instead, contact me via:
 
-- Email: contact@isaacadjei.me
+- Email: security@isaacadjei.me
 - Contact form: https://isaacadjei.me/contact
 
 Please include:

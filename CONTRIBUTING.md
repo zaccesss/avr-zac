@@ -109,3 +109,7 @@ Use the issue templates in `.github/ISSUE_TEMPLATE/` for:
 - **Documentation requests**: missing content, unclear explanations or suggested additions
 
 For questions about the hardware or build setup, check [WORKFLOW.md](WORKFLOW.md) and [docs/hardware_notes.md](docs/hardware_notes.md) first.
+
+## Using AI
+
+AI tools are welcome within my [AI policy](https://github.com/zaccesss/ai-policy), also [on my site](https://isaacadjei.me/ai-policy). **Every pull request must say how AI was used, even when the answer is None.** Write your own issue and pull request titles and descriptions, understand everything you submit and test it before you open it.

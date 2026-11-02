@@ -14,6 +14,7 @@ All notable changes to this project are documented in this file.
 
 ### Changed
 
+- Community files follow the [AI policy](https://github.com/zaccesss/ai-policy): pull requests declare AI use and issue forms ask whether AI helped. Security reports go to security@isaacadjei.me.
 - Tidied the contributor guide.
 - `bug_report.md` and `enhancement.md` converted to YAML issue forms, matching the structured issue-form standard used across my other repositories
 - README's Contact and Support section now links out to SUPPORT.md and SECURITY.md via callouts
