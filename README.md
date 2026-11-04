@@ -1,11 +1,14 @@
 # Bare Metal AVR
 
-![License](https://img.shields.io/badge/License-MIT-green)
+[![markdownlint](https://github.com/zaccesss/avr-zac/actions/workflows/markdownlint.yml/badge.svg)](https://github.com/zaccesss/avr-zac/actions/workflows/markdownlint.yml)
+[![Release](https://img.shields.io/github/v/release/zaccesss/avr-zac?label=release)](https://github.com/zaccesss/avr-zac/releases/latest)
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
 
 <p align="center">
   <a href="#overview">Overview</a> •
   <a href="#hardware">Hardware</a> •
   <a href="#getting-started">Getting Started</a> •
+  <a href="#build-and-flash-flow">Build Flow</a> •
   <a href="#projects">Projects</a> •
   <a href="#state-machine-modes">State Machine</a> •
   <a href="#documentation-hub">Docs</a> •
@@ -60,6 +63,41 @@ C:\avrdude\avrdude.exe -c stk500v2 -p m644p -P COM4 -b 57600 -B 40 -V -U flash:w
 > These flags match `upload_flags` in `platformio/platformio.ini`. `-B 40` slows the ISP bit clock to about 25 kHz and `-b 57600` sets the serial baud rate. Leaving `-B` out causes timeout errors with the Pololu programmer.
 
 See [WORKFLOW.md](WORKFLOW.md) for the full flag reference and troubleshooting steps.
+
+---
+
+<a id="build-and-flash-flow"></a>
+
+## Build and Flash Flow
+
+```mermaid
+flowchart LR
+    subgraph SOURCE["Source"]
+        PROJ["projects/learning_projects/<br/>one folder per project"]
+        SRC["platformio/src/<br/>the active project's .c file"]
+    end
+    subgraph BUILD["Build"]
+        PIO["PlatformIO in VS Code<br/>avr-gcc, -Os, F_CPU 20 MHz"]
+        MS["Microchip Studio 7<br/>same source, its own project"]
+    end
+    subgraph FLASH["Flash"]
+        AVRDUDE["avrdude<br/>stk500v2 on COM4, -b 57600 -B 40"]
+        POLOLU["Pololu USB AVR Programmer v2.1"]
+    end
+    subgraph BOARD["AVR Project PCB 2019"]
+        MCU["ATmega644P<br/>20 MHz crystal, LM317T regulator"]
+        HDR["10-way headers<br/>all 32 I/O pins"]
+    end
+    PROJ -- "copy one file to switch project" --> SRC
+    SRC --> PIO
+    SRC --> MS
+    PIO -- ".hex" --> AVRDUDE
+    MS -- ".hex, Program with Pololu tool" --> AVRDUDE
+    AVRDUDE --> POLOLU -- "ISP header J1" --> MCU
+    MCU --> HDR -- "jumper wires" --> BB["Breadboard<br/>five LEDs, button, buzzer"]
+```
+
+Both IDEs build the same C file and both flash through avrdude, so a project built in one can be flashed from the other. Only one project sits in `platformio/src/` at a time.
 
 ---
 

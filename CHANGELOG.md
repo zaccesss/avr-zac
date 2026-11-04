@@ -6,8 +6,11 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-03
+
 ### Added
 
+- A build and flash diagram in the README: source folders, PlatformIO or Microchip Studio, avrdude through the Pololu programmer and the PCB
 - CODEOWNERS, SECURITY.md, CODE_OF_CONDUCT.md, SUPPORT.md
 - `.markdownlint.json` and a markdown-lint CI workflow, with its own workflows README
 - `.github/ISSUE_TEMPLATE/config.yml` disabling the blank issue option, pointing to the security policy and eng@isaacadjei.me instead
@@ -21,6 +24,7 @@ All notable changes to this project are documented in this file.
 - `WORKFLOW.md` matches `platformio/platformio.ini`: the active environment is `01_blink`, builds use `-Os` and uploads use `-b 57600 -B 40`. The manual avrdude and fuse commands use the same flags. The task section describes the PlatformIO IDE's own tasks instead of a `tasks.json` the repo does not carry
 - The manual avrdude commands in the README, `docs/hardware_notes.md` and the session 1 notes use `-b 57600 -B 40`, matching `platformio/platformio.ini`, in place of `-B 10`. The fuse restore commands in `docs/hardware_notes.md` and `notes/general/hardware.md` gain the same flags and the session 1 command points at the `01_blink` build folder
 - `CONTRIBUTING.md` asks for `-Os` instead of `-O0`, matching `platformio.ini`
+- Routine tidy-up
 
 ### Fixed
 
